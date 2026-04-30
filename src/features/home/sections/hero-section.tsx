@@ -6,12 +6,12 @@ import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import { MembershipModal } from "@/features/classes/components/booking-modal";
+import { BookClassModalTrigger } from "@/features/classes/components/booking-modal";
 
 export const HeroSection = () => {
 	return (
 		<section className="relative flex min-h-screen w-full bg-primary">
-			<div className="container relative z-10 mx-auto flex-1 py-20 lg:py-24 xl:py-16 2xl:py-28">
+			<div className="container relative z-10 mx-auto flex-1 py-14 lg:py-24 xl:py-16 2xl:py-28">
 				<div className="flex h-full max-w-full flex-col justify-between sm:max-w-xl lg:max-w-3xl">
 					<div className="py-14 text-center md:text-start lg:py-16">
 						<Badge>Rooted in Joy. Designed for Balance.</Badge>
@@ -25,16 +25,14 @@ export const HeroSection = () => {
 						</p>
 
 						<div className="flex items-start gap-3">
-							<MembershipModal
-								trigger={
-									<Button
-										className="flex-1 cursor-pointer font-semibold shadow-lg duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:gap-9! hover:px-9 md:flex-none"
-										size="lg"
-									>
-										Book a class <ArrowRightIcon data-icon="inline-end" />
-									</Button>
-								}
-							/>
+							<BookClassModalTrigger>
+								<Button
+									className="flex-1 cursor-pointer font-semibold shadow-lg duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:gap-9! max-md:justify-between md:flex-none md:hover:px-9"
+									size="lg"
+								>
+									Book a class <ArrowRightIcon data-icon="inline-end" />
+								</Button>
+							</BookClassModalTrigger>
 
 							<Button
 								className="duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:px-8"

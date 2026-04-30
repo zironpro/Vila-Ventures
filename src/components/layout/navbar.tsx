@@ -27,6 +27,7 @@ import {
 import { Logo } from "@/assets/logo";
 
 import { NAV_LINKS } from "@/constants/layout";
+import { BookClassModalTrigger } from "@/features/classes/components/booking-modal";
 import { cn } from "@/lib/utils";
 
 import { ProgressiveBlur } from "../common/progressive-blur";
@@ -119,15 +120,12 @@ export const Navbar = () => {
 						<Button size="icon-lg" variant="ghost">
 							<ShoppingCartIcon size={24} />
 						</Button>
-						<Button
-							className="shadow-lg"
-							nativeButton={false}
-							render={<Link href="/classes" />}
-							size="lg"
-						>
-							<CalendarBlankIcon data-icon="inline-start" size={24} /> Book a
-							class
-						</Button>
+						<BookClassModalTrigger>
+							<Button className="cursor-pointer shadow-lg" size="lg">
+								<CalendarBlankIcon data-icon="inline-start" size={24} /> Book a
+								class
+							</Button>
+						</BookClassModalTrigger>
 					</div>
 				</div>
 

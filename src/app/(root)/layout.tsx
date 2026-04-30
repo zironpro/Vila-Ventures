@@ -10,6 +10,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { inter, serif } from "@/assets/fonts";
 
 import { SITE_URL } from "@/constants/site-config";
+import { MembershipModal } from "@/features/classes/components/booking-modal";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -100,6 +101,7 @@ export default function RootLayout({
 				<Footer />
 				<Toaster position="bottom-right" richColors />
 				<BreakpointIndicator />
+				<MembershipModal />
 			</body>
 		</html>
 	);

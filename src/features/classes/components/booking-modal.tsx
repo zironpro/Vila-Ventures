@@ -10,6 +10,7 @@ import {
 
 import {
 	Dialog,
+	DialogCreateHandle,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import {
 	Drawer,
+	DrawerCreateHandle,
 	DrawerDescription,
 	DrawerFooter,
 	DrawerHeader,
@@ -98,7 +100,7 @@ const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
 };
 
 interface PlansModalProps {
-	trigger: React.ReactElement;
+	children: React.ReactElement;
 }
 
 export const FORM_TITLE = "Choose Your Yoga Plan";
@@ -147,15 +149,32 @@ export function useMembershipSelection() {
 	return context;
 }
 
-export function MembershipModal({ trigger }: PlansModalProps) {
+const bookClassDrawerHandle = DrawerCreateHandle();
+const bookClassDialogHandle = DialogCreateHandle();
+
+export function BookClassModalTrigger({ children }: PlansModalProps) {
+	const isMobile = useMediaQuery("max-md");
+
+	if (isMobile) {
+		return <DrawerTrigger handle={bookClassDrawerHandle} render={children} />;
+	}
+
+	return <DialogTrigger handle={bookClassDialogHandle} render={children} />;
+}
+
+export function MembershipModal() {
 	const isMobile = useMediaQuery("max-md");
 	const [open, setOpen] = useState(false);
 
 	if (isMobile) {
 		return (
 			<MembershipSelectionProvider onCloseAllModals={() => setOpen(false)}>
-				<Drawer onOpenChange={setOpen} open={open}>
-					<DrawerTrigger render={trigger} />
+				<Drawer
+					handle={bookClassDrawerHandle}
+					onOpenChange={setOpen}
+					open={open}
+				>
+					{/* <DrawerTrigger render={trigger} /> */}
 					<DrawerPopup showBar>
 						<DrawerHeader>
 							<DrawerTitle>{FORM_TITLE}</DrawerTitle>
@@ -177,8 +196,8 @@ export function MembershipModal({ trigger }: PlansModalProps) {
 
 	return (
 		<MembershipSelectionProvider onCloseAllModals={() => setOpen(false)}>
-			<Dialog onOpenChange={setOpen} open={open}>
-				<DialogTrigger render={trigger} />
+			<Dialog handle={bookClassDialogHandle} onOpenChange={setOpen} open={open}>
+				{/* <DialogTrigger render={trigger} /> */}
 				<DialogPopup>
 					<DialogHeader className="border-b">
 						<DialogTitle>{FORM_TITLE}</DialogTitle>
