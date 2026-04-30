@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -9,6 +11,7 @@ import {
 	MagnifyingGlassIcon,
 	ShoppingCartIcon,
 } from "@phosphor-icons/react";
+import { domAnimation, LazyMotion, m } from "motion/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +33,41 @@ import { ProgressiveBlur } from "../common/progressive-blur";
 
 export const Navbar = () => {
 	const pathname = usePathname();
+	const isHomePage = pathname === "/";
+	const [isPastHero, setIsPastHero] = useState(false);
+
+	useEffect(() => {
+		if (!isHomePage) {
+			setIsPastHero(true);
+			return;
+		}
+
+		let ticking = false;
+
+		const getThreshold = () => Math.max(window.innerHeight - 72, 0);
+
+		const updateScrollState = () => {
+			setIsPastHero(window.scrollY >= getThreshold());
+		};
+
+		const onScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			window.requestAnimationFrame(() => {
+				updateScrollState();
+				ticking = false;
+			});
+		};
+
+		updateScrollState();
+		window.addEventListener("scroll", onScroll, { passive: true });
+		window.addEventListener("resize", updateScrollState);
+
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			window.removeEventListener("resize", updateScrollState);
+		};
+	}, [isHomePage]);
 
 	const isActiveRoute = (href: string) => {
 		if (href === "/") return pathname === href;
@@ -37,19 +75,31 @@ export const Navbar = () => {
 	};
 
 	return (
-		<header className="fixed inset-x-0 top-0 z-9999">
+		<header className="fixed inset-x-0 top-0 z-999">
 			<div className="container relative z-10 mx-auto mt-4 flex h-14 items-center justify-between px-4">
 				<Link className="flex flex-1 items-center gap-2" href="/">
-					<Logo />
+					<LazyMotion features={domAnimation}>
+						<m.div
+							animate={isHomePage && !isPastHero ? "hero" : "scrolled"}
+							className="will-change-[color]"
+							transition={{ duration: 0.25, ease: "easeOut" }}
+							variants={{
+								hero: { color: "var(--color-card)" },
+								scrolled: { color: "var(--color-foreground)" },
+							}}
+						>
+							<Logo />
+						</m.div>
+					</LazyMotion>
 				</Link>
 
-				<nav className="hidden h-full items-center rounded-lg bg-card px-6 shadow-lg transition-[padding] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:px-12 lg:flex">
-					<ul className="flex items-center gap-4">
+				<nav className="inset-shadow-white inset-shadow-xs hidden h-full items-center rounded-lg bg-card px-6 shadow-lg transition-[padding] duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:bg-card hover:px-9 supports-backdrop-filter:bg-card/75 supports-backdrop-filter:backdrop-blur-lg lg:flex">
+					<ul className="flex items-center gap-2">
 						{NAV_LINKS.map((nav) => (
 							<li key={`${nav.href}-${nav.label}`}>
 								<Link
 									className={cn(
-										"px-2 py-3 font-display text-foreground transition-colors hover:text-primary",
+										"px-3 py-3 font-display text-foreground transition-colors hover:text-primary",
 										isActiveRoute(nav.href) && "text-primary"
 									)}
 									href={nav.href}
@@ -62,7 +112,7 @@ export const Navbar = () => {
 				</nav>
 
 				<div className="hidden flex-1 justify-end lg:flex">
-					<div className="flex items-center gap-2 rounded-[calc(var(--radius-lg)+0.25rem)] border border-border/20 bg-card/95 p-1 backdrop-blur-lg supports-backdrop-filter:bg-muted/50">
+					<div className="flex items-center gap-2 rounded-[calc(var(--radius-lg)+0.25rem)] border border-border/20 bg-card/95 p-1 shadow-sm backdrop-blur-lg supports-backdrop-filter:bg-muted/50">
 						<Button size="icon-lg" variant="ghost">
 							<MagnifyingGlassIcon size={24} />
 						</Button>
@@ -70,6 +120,7 @@ export const Navbar = () => {
 							<ShoppingCartIcon size={24} />
 						</Button>
 						<Button
+							className="shadow-lg"
 							nativeButton={false}
 							render={<Link href="/classes" />}
 							size="lg"

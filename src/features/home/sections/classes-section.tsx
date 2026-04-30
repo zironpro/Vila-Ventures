@@ -18,7 +18,7 @@ export const ClassesSection = () => {
 				</p>
 
 				<Button
-					className="w-fit justify-self-start md:justify-self-end"
+					className="w-fit justify-self-start shadow-lg md:justify-self-end"
 					nativeButton={false}
 					render={<Link href="/classes" />}
 					size="lg"

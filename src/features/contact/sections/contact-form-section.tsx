@@ -95,12 +95,12 @@ export const ContactFormSection = () => {
 						</Link>
 					</div>
 
-					<div className="rounded-xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
-						<p className="font-display text-lg text-primary uppercase leading-snug lg:text-xl">
+					<div className="rounded-xl bg-primary p-6 text-background shadow-md sm:p-8">
+						<p className="font-display text-lg uppercase leading-snug lg:text-xl">
 							"Every question is the beginning of a conversation and every
 							conversation is the start of something meaningful."
 						</p>
-						<p className="mt-4 font-medium text-muted-foreground text-sm">
+						<p className="mt-4 font-medium text-muted/80 text-sm">
 							- Vila, Founder
 						</p>
 					</div>

@@ -8,7 +8,8 @@ export const SITE_CONFIG = {
 	logo: `${SITE_URL}/og-image.png`,
 
 	contact: {
-		email: "hello@withvila.com",
+		email: "vilaventures@gmail.com",
+		phone: "+971 56 818 1660",
 	},
 } as const;
 

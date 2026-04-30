@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 
 import { LogoIcon } from "@/assets/logo";
 
+import { SITE_CONFIG } from "@/constants/site-config";
+
 const footerNav = [
 	{
 		title: "Explore",
@@ -71,7 +73,7 @@ export const Footer = () => {
 						<div className="relative z-10 max-w-xl space-y-3">
 							<h2 className="text-balance font-display text-2xl uppercase leading-snug sm:text-3xl">
 								Ready to make your practice
-								<span className="ml-2 rounded-full bg-(--footer-accent-soft) px-3 py-0.5 font-medium text-(--footer-accent)">
+								<span className="ml-2 rounded-full bg-(--footer-accent-soft) px-3 py-0.5 font-medium text-primary">
 									a daily ritual?
 								</span>
 							</h2>
@@ -116,7 +118,7 @@ export const Footer = () => {
 					>
 						<div className="space-y-5">
 							<div className="inline-flex items-center rounded-full border border-(--footer-surface-border) bg-black/30 px-3 py-1 font-medium text-(--footer-muted) text-xs backdrop-blur">
-								<span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-(--footer-accent)" />
+								<span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-primary" />
 								Vila • Mindful movement studio
 							</div>
 							<div className="space-y-3">
@@ -132,14 +134,27 @@ export const Footer = () => {
 							<dl className="grid gap-3 text-(--footer-muted) text-sm sm:max-w-sm">
 								<div className="flex items-center gap-2">
 									<dt className="min-w-18 text-(--footer-muted) text-xs uppercase">
-										Contact
+										Email
 									</dt>
 									<dd>
 										<Link
-											className="transition hover:text-(--footer-accent)"
-											href="mailto:hello@withvila.com"
+											className="transition hover:text-primary"
+											href={`mailto:${SITE_CONFIG.contact.email}`}
 										>
-											hello@withvila.com
+											{SITE_CONFIG.contact.email}
+										</Link>
+									</dd>
+								</div>
+								<div className="flex items-center gap-2">
+									<dt className="min-w-18 text-(--footer-muted) text-xs uppercase">
+										Phone
+									</dt>
+									<dd>
+										<Link
+											className="transition hover:text-primary"
+											href={`tel:${SITE_CONFIG.contact.phone}`}
+										>
+											{SITE_CONFIG.contact.phone}
 										</Link>
 									</dd>
 								</div>
@@ -166,13 +181,13 @@ export const Footer = () => {
 										{section.links.map((link) => (
 											<li key={link.label}>
 												<Link
-													className="group inline-flex items-center gap-1.5 rounded-full px-1 py-0.5 text-sm transition hover:text-(--footer-accent) focus-visible:outline-none focus-visible:ring-(--footer-accent) focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+													className="group inline-flex items-center gap-1.5 rounded-full px-1 py-0.5 text-sm transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
 													href={link.href}
 												>
 													<span>{link.label}</span>
 													<span
 														aria-hidden="true"
-														className="h-0.5 w-3 rounded-full bg-(--footer-accent-soft) transition group-hover:w-5 group-hover:bg-(--footer-accent)"
+														className="h-0.5 w-3 rounded-full bg-(--footer-accent-soft) transition group-hover:w-5 group-hover:bg-primary"
 													/>
 												</Link>
 											</li>
@@ -193,7 +208,7 @@ export const Footer = () => {
 									{socialLinks.map(({ href, label, Icon }) => (
 										<Link
 											aria-label={label}
-											className="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-(--footer-surface-border) bg-black/35 text-(--footer-muted) shadow-[0_8px_18px_rgba(0,0,0,0.35)] outline-none transition hover:-translate-y-0.5 hover:border-(--footer-accent) hover:bg-(--footer-accent-soft) hover:text-(--footer-accent) focus-visible:ring-(--footer-accent) focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+											className="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-(--footer-surface-border) bg-black/35 text-(--footer-muted) shadow-[0_8px_18px_rgba(0,0,0,0.35)] outline-none transition hover:-translate-y-0.5 hover:border-primary hover:bg-(--footer-accent-soft) hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
 											href={href}
 											key={label}
 											rel="noopener noreferrer"
@@ -219,13 +234,13 @@ export const Footer = () => {
 						</div>
 						<div className="flex flex-wrap items-center gap-4 text-[0.78rem]">
 							<Link
-								className="transition hover:text-(--footer-accent) focus-visible:outline-none focus-visible:ring-(--footer-accent) focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+								className="transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
 								href="/privacy-policy"
 							>
 								Privacy Policy
 							</Link>
 							<Link
-								className="transition hover:text-(--footer-accent) focus-visible:outline-none focus-visible:ring-(--footer-accent) focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+								className="transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
 								href="/terms"
 							>
 								Terms & Conditions
@@ -233,11 +248,11 @@ export const Footer = () => {
 							<span className="inline-flex items-center gap-1 text-[0.78rem]">
 								<span className="relative inline-flex h-1.5 w-1.5 items-center justify-center">
 									<span className="absolute inline-flex h-2.5 w-2.5 animate-ping rounded-full bg-(--footer-accent-soft)" />
-									<span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-(--footer-accent)" />
+									<span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
 								</span>
 								Designed from UAE →{" "}
 								<Link
-									className="text-muted transition hover:text-(--footer-accent) focus-visible:outline-none focus-visible:ring-(--footer-accent) focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+									className="text-muted transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
 									href="https://zironpro.ae/?utm_source=vila-ventures&utm_medium=footer-link&utm_campaign=brand-credit"
 									target="_blank"
 								>

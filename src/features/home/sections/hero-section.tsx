@@ -28,7 +28,7 @@ export const HeroSection = () => {
 							<MembershipModal
 								trigger={
 									<Button
-										className="flex-1 cursor-pointer font-semibold duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:gap-9! hover:px-9 md:flex-none"
+										className="flex-1 cursor-pointer font-semibold shadow-lg duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:gap-9! hover:px-9 md:flex-none"
 										size="lg"
 									>
 										Book a class <ArrowRightIcon data-icon="inline-end" />

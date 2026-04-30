@@ -37,7 +37,7 @@ export const ProductsSection = () => {
 			<ProductsGrid />
 
 			<Button
-				className="duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:px-8"
+				className="shadow-lg duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:px-8"
 				nativeButton={false}
 				render={<Link href="/shop" />}
 				size="lg"

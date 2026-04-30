@@ -35,7 +35,11 @@ export const BlogsSection = () => {
 							Explore tips, stories, and ideas to support your journey toward a
 							balanced life.
 						</p>
-						<Button render={<Link href="/blog" />} size="lg">
+						<Button
+							className="shadow-lg"
+							render={<Link href="/blog" />}
+							size="lg"
+						>
 							View all blogs
 						</Button>
 					</div>
