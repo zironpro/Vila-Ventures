@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 export const Cta = () => {
 	return (
 		<section className="container mx-auto py-14">
-			<div className="relative grid grid-cols-1 items-center gap-6 overflow-hidden rounded-xl p-6 shadow-lg md:p-12 lg:grid-cols-7 lg:gap-12 lg:p-16">
+			<div className="relative grid grid-cols-1 items-center gap-6 overflow-hidden rounded-xl bg-primary p-6 shadow-lg md:p-12 lg:grid-cols-7 lg:gap-12 lg:p-16">
 				{/* <div className="relative inset-shadow-[0_4px_42px] inset-shadow-white/30 grid grid-cols-1 items-center gap-6 overflow-hidden rounded-2xl bg-radial-[at_50%_0%] bg-size-[120%_100%] from-orange-400 via-primary to-orange-800 p-6 md:p-12 lg:grid-cols-7 lg:gap-12"> */}
 
 				<div className="relative z-20 text-card lg:col-span-4">
