@@ -1,6 +1,10 @@
 import type { CollectionConfig } from "payload";
 
 import { adminOnly } from "@/payload/access/shared/adminOnly";
+import {
+	revalidateClassPlansAfterChange,
+	revalidateClassPlansAfterDelete,
+} from "@/payload/collections/class-plans/hooks/revalidateClassPlans";
 
 export const ClassPlans: CollectionConfig = {
 	slug: "class-plans",
@@ -14,6 +18,10 @@ export const ClassPlans: CollectionConfig = {
 		useAsTitle: "planName",
 		group: "Content",
 		defaultColumns: ["planName", "pricingType", "deliveryMode", "priceLabel"],
+	},
+	hooks: {
+		afterChange: [revalidateClassPlansAfterChange],
+		afterDelete: [revalidateClassPlansAfterDelete],
 	},
 	orderable: true,
 

@@ -1,6 +1,10 @@
 import type { CollectionConfig } from "payload";
 
 import { adminOnly } from "@/payload/access/shared/adminOnly";
+import {
+	revalidateFaqsAfterChange,
+	revalidateFaqsAfterDelete,
+} from "@/payload/collections/faqs/hooks/revalidateFaqs";
 
 export const Faqs: CollectionConfig = {
 	slug: "faqs",
@@ -14,6 +18,10 @@ export const Faqs: CollectionConfig = {
 		useAsTitle: "question",
 		group: "Content",
 		defaultColumns: ["question", "sortOrder", "updatedAt"],
+	},
+	hooks: {
+		afterChange: [revalidateFaqsAfterChange],
+		afterDelete: [revalidateFaqsAfterDelete],
 	},
 	orderable: true,
 	defaultPopulate: {

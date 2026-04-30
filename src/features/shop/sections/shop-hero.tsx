@@ -14,7 +14,7 @@ export const ShopHero = () => {
 					</Badge>
 					<div className="col-span-1 md:col-span-3">
 						<h1 className="text-balance font-display text-4xl text-card uppercase leading-snug sm:text-5xl lg:text-6xl">
-							Objects made for the way you actually practice
+							Products made for the way you actually practice
 						</h1>
 						<p className="mt-4 text-balance text-lg text-muted leading-relaxed lg:mt-2 lg:text-xl">
 							Every piece in our collection was designed alongside our yoga

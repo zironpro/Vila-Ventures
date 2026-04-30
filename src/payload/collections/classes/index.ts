@@ -9,6 +9,10 @@ import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 
 import { adminOnly } from "@/payload/access/shared/adminOnly";
+import {
+	revalidateClassesAfterChange,
+	revalidateClassesAfterDelete,
+} from "@/payload/collections/classes/hooks/revalidateClasses";
 
 export const Classes: CollectionConfig = {
 	slug: "classes",
@@ -23,6 +27,10 @@ export const Classes: CollectionConfig = {
 		useAsTitle: "title",
 		group: "Content",
 		defaultColumns: ["title", "tagline", "sortOrder", "updatedAt"],
+	},
+	hooks: {
+		afterChange: [revalidateClassesAfterChange],
+		afterDelete: [revalidateClassesAfterDelete],
 	},
 	defaultPopulate: {
 		title: true,
