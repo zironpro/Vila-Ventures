@@ -125,16 +125,9 @@ export const LaunchCountdown = () => {
 						key="live"
 						transition={{ duration: 0.45, ease: "easeOut" }}
 					>
-						<motion.span
-							animate={{ scale: [1, 1.08, 1] }}
-							className="mb-5 inline-flex size-3 rounded-full bg-emerald-300"
-							transition={{
-								duration: 0.9,
-								repeat: Number.POSITIVE_INFINITY,
-								ease: "easeInOut",
-							}}
-						/>
-						<h2 className="text-4xl sm:text-6xl">We are live now!</h2>
+						<h2 className="font-display text-4xl sm:text-6xl">
+							We are live now!
+						</h2>
 						<p className="mt-4 text-balance text-card/85 text-lg sm:text-2xl">
 							Welcome to Vila Ventures.
 						</p>
