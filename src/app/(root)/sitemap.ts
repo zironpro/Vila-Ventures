@@ -2,11 +2,22 @@ import type { MetadataRoute } from "next";
 
 import { SITE_URL } from "@/constants/site-config";
 import { BLOG_POSTS } from "@/features/blogs/constants";
-import { SHOP_PRODUCTS } from "@/features/shop/constants";
+import { getClasses } from "@/features/classes/actions";
+import { getProductSlugs } from "@/features/shop/actions";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-	const productUrls: MetadataRoute.Sitemap = SHOP_PRODUCTS.map((product) => ({
-		url: `${SITE_URL}/shop/${product.slug}`,
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+	const classes = await getClasses();
+	const products = await getProductSlugs();
+
+	const classUrls: MetadataRoute.Sitemap = classes.map((item) => ({
+		url: `${SITE_URL}/shop/${item.slug}`,
+		lastModified: new Date(),
+		changeFrequency: "monthly" as const,
+		priority: 0.7,
+	}));
+
+	const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
+		url: `${SITE_URL}/shop/${product}`,
 		lastModified: new Date(),
 		changeFrequency: "monthly" as const,
 		priority: 0.7,
@@ -56,6 +67,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			changeFrequency: "monthly",
 			priority: 0.8,
 		},
+		...classUrls,
 		...productUrls,
 		...blogUrls,
 	];
