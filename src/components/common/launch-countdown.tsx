@@ -149,7 +149,7 @@ export const LaunchCountdown = () => {
 						transition={{ duration: 0.4, ease: "easeOut" }}
 					>
 						<p className="text-card/80 text-sm uppercase tracking-[0.22em]">
-							Launching today at 9:20 AM
+							Launching today at 12PM, GST.
 						</p>
 						<div className="mt-5 flex items-center gap-3 font-semibold text-5xl sm:text-7xl">
 							<NumberFlow
@@ -176,9 +176,6 @@ export const LaunchCountdown = () => {
 								willChange
 							/>
 						</div>
-						<p className="mt-4 text-card/70 text-xs uppercase tracking-[0.2em]">
-							Hours : Minutes : Seconds
-						</p>
 					</motion.div>
 				)}
 			</AnimatePresence>
