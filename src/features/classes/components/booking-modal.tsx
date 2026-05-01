@@ -36,6 +36,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { BookingFormModal, BookingFormModalTrigger } from "./booking-form";
 import { Selector } from "./plan-selector";
 
+export type TypeClass = "hatha" | "vinyasa flow" | "kids";
 export type ClassType = "virtual" | "physical";
 export type FormatType = "group" | "private";
 
@@ -48,6 +49,8 @@ export interface PlanData {
 }
 
 interface MembershipSelectionContextValue {
+	typeClass: TypeClass;
+	setTypeClass: Dispatch<SetStateAction<TypeClass>>;
 	classType: ClassType;
 	setClassType: Dispatch<SetStateAction<ClassType>>;
 	formatType: FormatType;
@@ -113,6 +116,7 @@ export function MembershipSelectionProvider({
 	children: React.ReactNode;
 	onCloseAllModals: () => void;
 }) {
+	const [typeClass, setTypeClass] = useState<TypeClass>("hatha");
 	const [classType, setClassType] = useState<ClassType>("virtual");
 	const [formatType, setFormatType] = useState<FormatType>("group");
 	const [selectedPlan, setSelectedPlan] = useState<PlanData | null>(null);
@@ -122,6 +126,8 @@ export function MembershipSelectionProvider({
 	return (
 		<MembershipSelectionContext.Provider
 			value={{
+				typeClass,
+				setTypeClass,
 				classType,
 				setClassType,
 				formatType,

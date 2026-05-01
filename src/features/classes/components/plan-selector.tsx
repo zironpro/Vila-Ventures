@@ -9,10 +9,12 @@ import { Currency } from "@/assets/icons/currency";
 import { cn } from "@/lib/utils";
 import { pluralize } from "@/lib/utils/pluralize";
 
-import { ClassType, useMembershipSelection } from "./booking-modal";
+import { ClassType, TypeClass, useMembershipSelection } from "./booking-modal";
 
 export function Selector() {
 	const {
+		typeClass,
+		setTypeClass,
 		classType,
 		setClassType,
 		formatType,
@@ -29,6 +31,34 @@ export function Selector() {
 				<div className="flex items-center gap-2">
 					<div className="flex size-5 items-center justify-center rounded-full bg-primary text-white text-xs">
 						1
+					</div>
+					<h3 className="font-medium text-muted-foreground">
+						Select Class Type
+					</h3>
+				</div>
+
+				<div className="flex gap-2">
+					{(["hatha", "vinyasa flow", "kids"] as TypeClass[]).map((type) => (
+						<Button
+							className="flex-1 capitalize"
+							key={type}
+							onClick={() => {
+								setTypeClass(type);
+								setSelectedPlan(null);
+							}}
+							size="lg"
+							variant={typeClass === type ? "default" : "outline"}
+						>
+							{type} Yoga
+						</Button>
+					))}
+				</div>
+			</div>
+			{/* Step 1: Class Type */}
+			<div className="space-y-2.5">
+				<div className="flex items-center gap-2">
+					<div className="flex size-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+						2
 					</div>
 					<h3 className="font-medium text-muted-foreground">
 						Select Class Type
@@ -57,7 +87,7 @@ export function Selector() {
 			<div className="space-y-2.5">
 				<div className="flex items-center gap-2">
 					<div className="flex size-5 items-center justify-center rounded-full bg-primary text-white text-xs">
-						2
+						3
 					</div>
 					<h3 className="font-medium text-muted-foreground">Select Format</h3>
 				</div>
@@ -94,7 +124,7 @@ export function Selector() {
 			<div className="space-y-2">
 				<div className="flex items-center gap-2">
 					<div className="flex size-5 items-center justify-center rounded-full bg-primary text-white text-xs">
-						3
+						4
 					</div>
 					<h3 className="font-medium text-muted-foreground">
 						Choose Your Plan

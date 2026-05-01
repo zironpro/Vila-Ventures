@@ -1,4 +1,4 @@
-export const SITE_URL = "https://vilaventures.com" as const;
+export const SITE_URL = "https://vilaventures.ae" as const;
 
 export const SITE_CONFIG = {
 	name: "Vila Ventures",
