@@ -47,6 +47,7 @@ const getCountdown = (targetTime: Date): CountdownParts => {
 };
 
 export const LaunchCountdown = () => {
+	// const isDev = false;
 	const isDev = process.env.NODE_ENV === "development";
 	const targetTime = useMemo(() => getTargetTime(), []);
 	const didCelebrate = useRef(false);
@@ -141,12 +142,12 @@ export const LaunchCountdown = () => {
 						key="countdown"
 						transition={{ duration: 0.4, ease: "easeOut" }}
 					>
-						<p className="text-card/80 text-sm uppercase tracking-[0.22em]">
+						<p className="font-medium text-card/80 text-sm uppercase tracking-wide">
 							Launching today at 12PM, GST.
 						</p>
-						<div className="mt-5 flex items-center gap-3 font-semibold text-5xl sm:text-7xl">
+						<div className="mt-5 flex items-center gap-2 font-semibold text-4xl sm:text-7xl md:gap-3">
 							<NumberFlow
-								className="w-28 rounded-lg bg-card/20 px-3 py-2"
+								className="rounded-lg bg-card/20 px-3 py-2 md:w-28"
 								format={{ minimumIntegerDigits: 2, useGrouping: false }}
 								spinTiming={{ duration: 1000, easing: "ease-out" }}
 								value={time.hours}
@@ -154,7 +155,7 @@ export const LaunchCountdown = () => {
 							/>
 							<span className="text-card/60">:</span>
 							<NumberFlow
-								className="w-28 rounded-lg bg-card/20 px-3 py-2"
+								className="rounded-lg bg-card/20 px-3 py-2 md:w-28"
 								format={{ minimumIntegerDigits: 2, useGrouping: false }}
 								spinTiming={{ duration: 1000, easing: "ease-out" }}
 								value={time.minutes}
@@ -162,7 +163,7 @@ export const LaunchCountdown = () => {
 							/>
 							<span className="text-card/60">:</span>
 							<NumberFlow
-								className="w-28 rounded-lg bg-card/20 px-3 py-2"
+								className="rounded-lg bg-card/20 px-3 py-2 md:w-28"
 								format={{ minimumIntegerDigits: 2, useGrouping: false }}
 								spinTiming={{ duration: 1000, easing: "ease-out" }}
 								value={time.seconds}
