@@ -48,16 +48,23 @@ const leadCaptureDialogHandle = DialogCreateHandle();
 
 export function BookingFormModalTrigger() {
 	const isMobile = useMediaQuery("max-md");
-	const { selectedPlan } = useMembershipSelection();
+	const { selectedPlan, selectedTimeSlots } = useMembershipSelection();
 
-	const triggerLabel = selectedPlan
-		? "Continue Booking"
-		: "Select a plan first";
+	const isValid =
+		selectedPlan &&
+		selectedTimeSlots.length > 0 &&
+		selectedTimeSlots.length <= selectedPlan.maxSlots;
+
+	const triggerLabel = !selectedPlan
+		? "Select a plan first"
+		: selectedTimeSlots.length < selectedPlan.maxSlots
+			? `Select ${selectedPlan.maxSlots} time slot${selectedPlan.maxSlots > 1 ? "s" : ""}`
+			: "Continue Booking";
 
 	if (isMobile) {
 		return (
 			<DrawerTrigger
-				disabled={!selectedPlan}
+				disabled={!isValid}
 				handle={leadCaptureDrawerHandle}
 				render={<Button className="px-6" type="button" />}
 			>
@@ -68,7 +75,7 @@ export function BookingFormModalTrigger() {
 
 	return (
 		<DialogTrigger
-			disabled={!selectedPlan}
+			disabled={!isValid}
 			handle={leadCaptureDialogHandle}
 			render={<Button className="px-6" type="button" />}
 		>
@@ -117,8 +124,13 @@ export function BookingFormModal() {
 }
 
 function BookingForm({ onSubmitted }: { onSubmitted: () => void }) {
-	const { selectedPlan, classType, formatType, closeAllModals } =
-		useMembershipSelection();
+	const {
+		selectedPlan,
+		selectedTimeSlots,
+		classType,
+		formatType,
+		closeAllModals,
+	} = useMembershipSelection();
 
 	const form = useForm({
 		defaultValues: {
@@ -128,8 +140,8 @@ function BookingForm({ onSubmitted }: { onSubmitted: () => void }) {
 			notes: "",
 		},
 		onSubmit: async ({ value, formApi }) => {
-			if (!selectedPlan) {
-				toast.error("Please select a plan before continuing.");
+			if (!selectedPlan || selectedTimeSlots.length === 0) {
+				toast.error("Please select a plan and time slots before continuing.");
 				return;
 			}
 
@@ -149,6 +161,8 @@ function BookingForm({ onSubmitted }: { onSubmitted: () => void }) {
 							classes: selectedPlan.classes,
 							frequency: selectedPlan.frequency,
 							price: selectedPlan.price,
+							timeSlots: selectedTimeSlots,
+
 							classType,
 							formatType,
 						},
@@ -169,10 +183,10 @@ function BookingForm({ onSubmitted }: { onSubmitted: () => void }) {
 		},
 	});
 
-	if (!selectedPlan) {
+	if (!selectedPlan || selectedTimeSlots.length === 0) {
 		return (
 			<div className="py-6 text-center text-muted-foreground text-sm">
-				Select a plan first to continue.
+				Select a plan and time slots first to continue.
 			</div>
 		);
 	}

@@ -46,6 +46,13 @@ export interface PlanData {
 	frequency: string;
 	price: number;
 	popular?: boolean;
+	maxSlots: number;
+}
+
+export interface ScheduleData {
+	id: string;
+	day: string;
+	time: string;
 }
 
 interface MembershipSelectionContextValue {
@@ -57,47 +64,112 @@ interface MembershipSelectionContextValue {
 	setFormatType: Dispatch<SetStateAction<FormatType>>;
 	selectedPlan: PlanData | null;
 	setSelectedPlan: Dispatch<SetStateAction<PlanData | null>>;
+	selectedTimeSlots: ScheduleData[];
+	setSelectedTimeSlots: Dispatch<SetStateAction<ScheduleData[]>>;
 	currentPlans: PlanData[];
+	currentSchedules: ScheduleData[];
 	closeAllModals: () => void;
 }
 
 const MembershipSelectionContext =
 	createContext<MembershipSelectionContextValue | null>(null);
 
-const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
+export const SCHEDULES: Record<
+	TypeClass,
+	Record<ClassType, Record<FormatType, ScheduleData[]>>
+> = {
+	hatha: {
+		physical: {
+			private: [
+				{ id: "h-p-p-1", day: "Monday", time: "12:00 PM – 1:15 PM" },
+				{ id: "h-p-p-2", day: "Tuesday", time: "12:00 PM – 1:15 PM" },
+				{ id: "h-p-p-3", day: "Wednesday", time: "7:30 PM – 8:45 PM" },
+				{ id: "h-p-p-4", day: "Thursday", time: "10:00 AM – 11:15 AM" },
+				{ id: "h-p-p-5", day: "Friday", time: "12:00 PM – 1:15 PM" },
+				{ id: "h-p-p-6", day: "Saturday", time: "12:00 PM – 1:15 PM" },
+			],
+			group: [],
+		},
+		virtual: {
+			group: [
+				{ id: "h-v-g-1", day: "Monday", time: "7:30 PM – 8:45 PM" },
+				{ id: "h-v-g-2", day: "Tuesday", time: "10:00 AM – 11:15 AM" },
+			],
+			private: [],
+		},
+	},
+	"vinyasa flow": {
+		physical: {
+			group: [
+				{ id: "v-p-g-1", day: "Wednesday", time: "4:00 PM – 5:00 PM" },
+				{ id: "v-p-g-2", day: "Saturday", time: "7:30 PM – 8:45 PM" },
+			],
+			private: [],
+		},
+		virtual: {
+			group: [
+				{ id: "v-v-g-1", day: "Tuesday", time: "4:00 PM – 5:00 PM" },
+				{ id: "v-v-g-2", day: "Friday", time: "4:00 PM – 5:00 PM" },
+				{ id: "v-v-g-3", day: "Thursday", time: "7:30 PM – 8:45 PM" },
+			],
+			private: [],
+		},
+	},
+	kids: {
+		physical: {
+			group: [
+				{ id: "k-p-g-1", day: "Monday", time: "4:00 PM – 5:00 PM" },
+				{ id: "k-p-g-2", day: "Thursday", time: "4:00 PM – 5:00 PM" },
+				{ id: "k-p-g-3", day: "Saturday", time: "4:00 PM – 5:00 PM" },
+			],
+			private: [
+				{ id: "k-p-p-1", day: "Tuesday", time: "7:30 PM – 8:45 PM" },
+				{ id: "k-p-p-2", day: "Friday", time: "7:30 PM – 8:45 PM" },
+			],
+		},
+		virtual: {
+			group: [],
+			private: [],
+		},
+	},
+};
+
+export const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
 	virtual: {
 		group: [
-			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 180 },
+			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 180, maxSlots: 1 },
 			{
 				name: "Regular",
 				classes: 8,
 				frequency: "2 Per Week",
 				price: 300,
 				popular: true,
+				maxSlots: 2,
 			},
-			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 420 },
+			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 420, maxSlots: 3 },
 		],
 		private: [
-			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 350 },
-			{ name: "Regular", classes: 8, frequency: "2 Per Week", price: 650 },
-			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 950 },
+			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 350, maxSlots: 1 },
+			{ name: "Regular", classes: 8, frequency: "2 Per Week", price: 650, maxSlots: 2 },
+			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 950, maxSlots: 3 },
 		],
 	},
 	physical: {
 		group: [
-			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 250 },
+			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 250, maxSlots: 1 },
 			{
 				name: "Regular",
 				classes: 8,
 				frequency: "2 Per Week",
 				price: 450,
 				popular: true,
+				maxSlots: 2,
 			},
-			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 600 },
+			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 600, maxSlots: 3 },
 		],
 		private: [
-			{ name: "1 Person", classes: 1, frequency: "Per Session", price: 250 },
-			{ name: "2-3 Person", classes: 1, frequency: "Per Person", price: 200 },
+			{ name: "1 Person", classes: 1, frequency: "Per Session", price: 250, maxSlots: 1 },
+			{ name: "2-3 Person", classes: 1, frequency: "Per Person", price: 200, maxSlots: 1 },
 		],
 	},
 };
@@ -120,8 +192,10 @@ export function MembershipSelectionProvider({
 	const [classType, setClassType] = useState<ClassType>("virtual");
 	const [formatType, setFormatType] = useState<FormatType>("group");
 	const [selectedPlan, setSelectedPlan] = useState<PlanData | null>(null);
+	const [selectedTimeSlots, setSelectedTimeSlots] = useState<ScheduleData[]>([]);
 
 	const currentPlans = PLANS[classType][formatType];
+	const currentSchedules = SCHEDULES[typeClass][classType][formatType];
 
 	return (
 		<MembershipSelectionContext.Provider
@@ -134,7 +208,10 @@ export function MembershipSelectionProvider({
 				setFormatType,
 				selectedPlan,
 				setSelectedPlan,
+				selectedTimeSlots,
+				setSelectedTimeSlots,
 				currentPlans,
+				currentSchedules,
 				closeAllModals: onCloseAllModals,
 			}}
 		>

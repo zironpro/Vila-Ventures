@@ -21,7 +21,10 @@ export function Selector() {
 		setFormatType,
 		selectedPlan,
 		setSelectedPlan,
+		selectedTimeSlots,
+		setSelectedTimeSlots,
 		currentPlans,
+		currentSchedules,
 	} = useMembershipSelection();
 
 	return (
@@ -45,6 +48,7 @@ export function Selector() {
 							onClick={() => {
 								setTypeClass(type);
 								setSelectedPlan(null);
+								setSelectedTimeSlots([]);
 							}}
 							size="lg"
 							variant={typeClass === type ? "default" : "outline"}
@@ -73,6 +77,7 @@ export function Selector() {
 							onClick={() => {
 								setClassType(type);
 								setSelectedPlan(null);
+								setSelectedTimeSlots([]);
 							}}
 							size="lg"
 							variant={classType === type ? "default" : "outline"}
@@ -98,6 +103,7 @@ export function Selector() {
 						onClick={() => {
 							setFormatType("group");
 							setSelectedPlan(null);
+							setSelectedTimeSlots([]);
 						}}
 						size="lg"
 						variant={formatType === "group" ? "default" : "outline"}
@@ -109,6 +115,7 @@ export function Selector() {
 						onClick={() => {
 							setFormatType("private");
 							setSelectedPlan(null);
+							setSelectedTimeSlots([]);
 						}}
 						size="lg"
 						variant={formatType === "private" ? "default" : "outline"}
@@ -120,7 +127,7 @@ export function Selector() {
 				</div>
 			</div>
 
-			{/* Step 3: Plan Cards */}
+			{/* Step 4: Plan Cards */}
 			<div className="space-y-2">
 				<div className="flex items-center gap-2">
 					<div className="flex size-5 items-center justify-center rounded-full bg-primary text-white text-xs">
@@ -144,12 +151,15 @@ export function Selector() {
 							<button
 								className={cn(
 									"relative isolate z-0 overflow-visible rounded-2xl p-6 text-left transition-all duration-300",
-									selectedPlan === plan
+									selectedPlan?.name === plan.name
 										? "bg-white ring-2 ring-primary"
 										: "bg-muted/60 hover:bg-muted"
 								)}
 								key={plan.name}
-								onClick={() => setSelectedPlan(plan)}
+								onClick={() => {
+									setSelectedPlan(plan);
+									setSelectedTimeSlots([]);
+								}}
 							>
 								<div className="flex items-start justify-between gap-3">
 									<div className="flex-1">
@@ -170,7 +180,7 @@ export function Selector() {
 													</Badge>
 												)}
 											</div>
-											{selectedPlan === plan && (
+											{selectedPlan?.name === plan.name && (
 												<motion.div
 													animate={{ scale: 1 }}
 													className="absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-primary"
@@ -209,6 +219,91 @@ export function Selector() {
 					</motion.div>
 				</AnimatePresence>
 			</div>
+
+			{/* Step 5: Time Slots */}
+			{selectedPlan && (
+				<div className="space-y-2">
+					<div className="flex items-center gap-2">
+						<div className="flex size-5 items-center justify-center rounded-full bg-primary text-white text-xs">
+							5
+						</div>
+						<h3 className="font-medium text-muted-foreground">
+							Choose Your Time Slots (Select {selectedPlan.maxSlots})
+						</h3>
+					</div>
+
+					<AnimatePresence mode="wait">
+						<motion.div
+							animate={{ opacity: 1, y: 0 }}
+							className="grid gap-3"
+							exit={{ opacity: 0, y: -10 }}
+							initial={{ opacity: 0, y: 10 }}
+							key={`${typeClass}-${classType}-${formatType}`}
+							transition={{ duration: 0.3 }}
+						>
+							{currentSchedules.length > 0 ? (
+								currentSchedules.map((schedule) => {
+									const isSelected = selectedTimeSlots.some(
+										(s) => s.id === schedule.id
+									);
+									return (
+										<button
+											className={cn(
+												"relative isolate z-0 overflow-visible rounded-xl border p-4 text-left transition-all duration-300",
+												isSelected
+													? "border-primary bg-primary/5 ring-1 ring-primary"
+													: "border-border hover:border-primary/50 hover:bg-muted/50"
+											)}
+											key={schedule.id}
+											onClick={() => {
+												if (isSelected) {
+													setSelectedTimeSlots((prev) =>
+														prev.filter((s) => s.id !== schedule.id)
+													);
+												} else {
+													if (
+														selectedTimeSlots.length < selectedPlan.maxSlots
+													) {
+														setSelectedTimeSlots((prev) => [...prev, schedule]);
+													}
+												}
+											}}
+										>
+											<div className="flex items-center justify-between gap-3">
+												<div className="flex items-center gap-3">
+													<div className="font-medium">{schedule.day}</div>
+													<div className="text-muted-foreground text-sm">
+														{schedule.time}
+													</div>
+												</div>
+												<div
+													className={cn(
+														"flex size-5 items-center justify-center rounded-full border transition-colors",
+														isSelected
+															? "border-primary bg-primary"
+															: "border-input"
+													)}
+												>
+													{isSelected && (
+														<CheckIcon
+															className="size-3 text-white"
+															weight="bold"
+														/>
+													)}
+												</div>
+											</div>
+										</button>
+									);
+								})
+							) : (
+								<div className="py-8 text-center text-muted-foreground">
+									No schedules available for this class type.
+								</div>
+							)}
+						</motion.div>
+					</AnimatePresence>
+				</div>
+			)}
 		</div>
 	);
 }
