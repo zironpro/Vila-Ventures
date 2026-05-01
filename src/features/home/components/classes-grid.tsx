@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ProgressiveBlur } from "@/components/common/progressive-blur";
 import { Media } from "@/components/media";
 
@@ -8,7 +10,11 @@ export const ClassesGrid = async () => {
 	return (
 		<div className="mt-9 grid grid-cols-1 gap-6 sm:grid-cols-2">
 			{classes.map((item) => (
-				<div className="group" key={item.id}>
+				<Link
+					className="group block"
+					href={`/classes/${item.slug}`}
+					key={item.id}
+				>
 					<div className="mb-2 flex items-center justify-between gap-3 rounded-lg bg-card p-6">
 						<h3 className="font-bold text-xl">{item.title}</h3>
 						<p className="font-light text-muted-foreground text-sm">
@@ -32,7 +38,7 @@ export const ClassesGrid = async () => {
 							/>
 						</div>
 					</div>
-				</div>
+				</Link>
 			))}
 		</div>
 	);

@@ -33,7 +33,7 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
 	),
 	li: ({ node, nodesToJSX }) => (
 		<li className="relative pl-8">
-			<span className="absolute top-[0.45em] left-0 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-white">
+			<span className="absolute top-[0.45em] left-0 flex size-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-white">
 				<CheckIcon aria-hidden className="size-3" weight="bold" />
 			</span>
 			{nodesToJSX({ nodes: node.children })}
@@ -41,11 +41,14 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({
 	),
 	listitem: ({ node, nodesToJSX }) => (
 		<li className="relative pl-8">
-			<span className="absolute top-[0.45em] left-0 flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-white">
+			<span className="absolute top-1/2 -left-6 flex size-5 -translate-y-1/2 items-center justify-center rounded-full bg-primary text-white">
 				<CheckIcon aria-hidden className="size-3" weight="bold" />
 			</span>
 			{nodesToJSX({ nodes: node.children })}
 		</li>
+	),
+	list: ({ node, nodesToJSX }) => (
+		<ul className="list-none pl-0">{nodesToJSX({ nodes: node.children })}</ul>
 	),
 	blocks: {
 		banner: ({ node }) => (

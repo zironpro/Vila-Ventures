@@ -5,6 +5,14 @@ import {
 	OverviewField,
 	PreviewField,
 } from "@payloadcms/plugin-seo/fields";
+import {
+	FixedToolbarFeature,
+	HeadingFeature,
+	InlineToolbarFeature,
+	lexicalEditor,
+	OrderedListFeature,
+	UnorderedListFeature,
+} from "@payloadcms/richtext-lexical";
 import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 
@@ -26,7 +34,10 @@ export const Classes: CollectionConfig = {
 	admin: {
 		useAsTitle: "title",
 		group: "Content",
-		defaultColumns: ["title", "tagline", "sortOrder", "updatedAt"],
+		description:
+			"Manage each class card and its dedicated class detail page content.",
+		defaultColumns: ["title", "slug", "tagline", "updatedAt"],
+		listSearchableFields: ["title", "slug", "tagline", "description"],
 	},
 	hooks: {
 		afterChange: [revalidateClassesAfterChange],
@@ -36,6 +47,7 @@ export const Classes: CollectionConfig = {
 		title: true,
 		tagline: true,
 		description: true,
+		content: true,
 		bestFor: true,
 		format: true,
 		image: true,
@@ -45,40 +57,62 @@ export const Classes: CollectionConfig = {
 	},
 	fields: [
 		{
+			type: "row",
+			fields: [
+				{
+					name: "title",
+					type: "text",
+					required: true,
+					index: true,
+					label: "Class title",
+					admin: {
+						width: "50%",
+						placeholder: "e.g. Hatha Yoga",
+					},
+				},
+				{
+					name: "tagline",
+					type: "text",
+					required: true,
+					label: "Short tagline",
+					admin: {
+						width: "50%",
+						placeholder: "e.g. Grounding. Gentle. Restorative.",
+					},
+				},
+			],
+		},
+		{
 			type: "tabs",
 			tabs: [
 				{
 					label: "Content",
+
 					fields: [
-						{
-							name: "image",
-							type: "upload",
-							relationTo: "media",
-							required: true,
-						},
-						{
-							name: "title",
-							type: "text",
-							required: true,
-							index: true,
-						},
-						{
-							name: "tagline",
-							type: "text",
-							required: true,
-						},
 						{
 							name: "description",
 							type: "textarea",
 							required: true,
+							label: "Short description",
 						},
 						{
-							name: "bestFor",
-							type: "text",
-						},
-						{
-							name: "format",
-							type: "text",
+							name: "content",
+							type: "richText",
+							required: true,
+							editor: lexicalEditor({
+								features: ({ rootFeatures }) => {
+									return [
+										...rootFeatures,
+										FixedToolbarFeature(),
+										InlineToolbarFeature(),
+										HeadingFeature({
+											enabledHeadingSizes: ["h2", "h3", "h4"],
+										}),
+										UnorderedListFeature(),
+										OrderedListFeature(),
+									];
+								},
+							}),
 						},
 					],
 				},
@@ -104,6 +138,43 @@ export const Classes: CollectionConfig = {
 							descriptionPath: "meta.description",
 						}),
 					],
+				},
+			],
+		},
+		{
+			name: "image",
+			type: "upload",
+			relationTo: "media",
+			required: true,
+			label: "Class image",
+			admin: {
+				position: "sidebar",
+			},
+		},
+
+		{
+			type: "group",
+			admin: {
+				position: "sidebar",
+			},
+			fields: [
+				{
+					name: "format",
+					type: "text",
+					label: "Format",
+					admin: {
+						width: "50%",
+						placeholder: "e.g. In-studio, Virtual, or Hybrid",
+					},
+				},
+				{
+					name: "bestFor",
+					type: "text",
+					label: "Best for",
+					admin: {
+						width: "50%",
+						placeholder: "e.g. Beginners, stress relief, flexibility",
+					},
 				},
 			],
 		},

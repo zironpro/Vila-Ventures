@@ -58,7 +58,7 @@ export const Footer = () => {
 	const prefersReducedMotion = useReducedMotion();
 
 	return (
-		<footer className="relative mt-24 bg-taupe-950 text-card">
+		<footer className="relative mt-9 bg-taupe-950 text-card">
 			<div className="relative z-10 pt-16 pb-10">
 				<div className="container max-w-7xl">
 					<motion.section

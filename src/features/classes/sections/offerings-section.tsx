@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ProgressiveBlur } from "@/components/common/progressive-blur";
 import { Media } from "@/components/media";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +36,11 @@ export const OfferingsSection = ({ classes }: OfferingsSectionProps) => {
 								{item.tagline}
 							</p>
 						</div>
-						<div className="rounded-[calc(var(--radius)+4px)] bg-card p-1">
+						<Link
+							aria-label={`View ${item.title} class details`}
+							className="block rounded-[calc(var(--radius)+4px)] bg-card p-1"
+							href={`/classes/${item.slug}`}
+						>
 							<div className="relative aspect-4/3 size-full overflow-hidden rounded-lg">
 								<div className="absolute inset-x-0 bottom-0 z-20 flex flex-col gap-3 p-6 text-card">
 									<p className="font-medium text-lg tracking-wide">
@@ -56,7 +62,7 @@ export const OfferingsSection = ({ classes }: OfferingsSectionProps) => {
 									size="(max-width: 640px) 100vw, 50vw"
 								/>
 							</div>
-						</div>
+						</Link>
 					</div>
 				))}
 			</div>

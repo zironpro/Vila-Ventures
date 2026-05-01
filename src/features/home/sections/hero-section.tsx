@@ -19,12 +19,12 @@ export const HeroSection = () => {
 						<h1 className="mt-2 font-display text-5xl text-card sm:text-5xl lg:text-6xl">
 							Yoga Classes & Mindful Lifestyle Products in UAE
 						</h1>
-						<p className="my-6 text-balance text-card text-lg leading-snug sm:text-xl lg:my-8 lg:text-2xl">
+						<p className="mt-3 text-balance text-card text-lg leading-snug sm:text-xl lg:mt-4 lg:text-2xl">
 							Discover mindful yoga classes, creative lifestyle products, and a
 							space where movement, design, and joy come together - with Vila.
 						</p>
 
-						<div className="flex items-start gap-3">
+						<div className="mt-4 flex items-start gap-3 md:mt-6">
 							<BookClassModalTrigger>
 								<Button
 									className="flex-1 cursor-pointer font-semibold shadow-lg duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:gap-9! max-md:justify-between md:flex-none md:hover:px-9"

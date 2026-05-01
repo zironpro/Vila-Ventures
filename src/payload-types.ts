@@ -575,18 +575,32 @@ export interface Address {
   createdAt: string;
 }
 /**
+ * Manage each class card and its dedicated class detail page content.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "classes".
  */
 export interface Class {
   id: number;
   _order?: string | null;
-  image: number | Media;
   title: string;
   tagline: string;
   description: string;
-  bestFor?: string | null;
-  format?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   meta?: {
     title?: string | null;
     /**
@@ -595,6 +609,9 @@ export interface Class {
     image?: (number | null) | Media;
     description?: string | null;
   };
+  image: number | Media;
+  format?: string | null;
+  bestFor?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -905,12 +922,10 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface ClassesSelect<T extends boolean = true> {
   _order?: T;
-  image?: T;
   title?: T;
   tagline?: T;
   description?: T;
-  bestFor?: T;
-  format?: T;
+  content?: T;
   meta?:
     | T
     | {
@@ -918,6 +933,9 @@ export interface ClassesSelect<T extends boolean = true> {
         image?: T;
         description?: T;
       };
+  image?: T;
+  format?: T;
+  bestFor?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
