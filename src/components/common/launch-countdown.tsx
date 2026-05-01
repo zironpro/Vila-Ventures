@@ -48,7 +48,7 @@ const getCountdown = (targetTime: Date): CountdownParts => {
 
 export const LaunchCountdown = () => {
 	// const isDev = false;
-	const isDev = process.env.NODE_ENV === "development";
+	const isDev = process.env.APP_ENV === "development";
 	const targetTime = useMemo(() => getTargetTime(), []);
 	const didCelebrate = useRef(false);
 	const [isVisible, setIsVisible] = useState(true);
