@@ -7,6 +7,7 @@ import { LaunchCountdown } from "@/components/common/launch-countdown";
 import { BreakpointIndicator } from "@/components/layout/breakpoint-indicator";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { Providers } from "@/components/providers";
 
 import { inter, serif } from "@/assets/fonts";
 
@@ -97,13 +98,15 @@ export default function RootLayout({
 			lang="en"
 		>
 			<body>
-				<LaunchCountdown />
-				<Navbar />
-				{children}
-				<Footer />
-				<Toaster position="bottom-right" richColors />
-				<BreakpointIndicator />
-				<MembershipModal />
+				<Providers>
+					<LaunchCountdown />
+					<Navbar />
+					{children}
+					<Footer />
+					<Toaster position="bottom-right" richColors />
+					<BreakpointIndicator />
+					<MembershipModal />
+				</Providers>
 			</body>
 		</html>
 	);
