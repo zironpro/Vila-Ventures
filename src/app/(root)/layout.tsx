@@ -3,7 +3,6 @@ import "@/styles/globals.css";
 
 import { Toaster } from "sonner";
 
-import { LaunchCountdown } from "@/components/common/launch-countdown";
 import { BreakpointIndicator } from "@/components/layout/breakpoint-indicator";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
@@ -102,7 +101,7 @@ export default function RootLayout({
 		>
 			<body>
 				<Providers>
-					<LaunchCountdown />
+					{/* <LaunchCountdown /> */}
 					<Navbar />
 					{children}
 					<Footer />
