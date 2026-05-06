@@ -83,6 +83,9 @@ export const metadata: Metadata = {
 	verification: {
 		google: "hZ8wVNy_ruWjv1Dtfa9XJeHhjxFniBBvwnJvopj2boY",
 	},
+	other: {
+		"facebook-domain-verification": "ia42v5xkmsnr4mxzt3z73ofn96b5yl",
+	},
 };
 
 export default function RootLayout({
