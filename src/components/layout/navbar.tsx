@@ -89,7 +89,7 @@ export const Navbar = () => {
 								scrolled: { color: "var(--color-foreground)" },
 							}}
 						>
-							<Logo />
+							<Logo className="h-10 w-auto md:h-auto" />
 						</m.div>
 					</LazyMotion>
 				</Link>
@@ -115,10 +115,10 @@ export const Navbar = () => {
 				<div className="hidden flex-1 justify-end lg:flex">
 					<div className="flex items-center gap-2 rounded-[calc(var(--radius-lg)+0.25rem)] border border-border/20 bg-card/95 p-1 shadow-sm backdrop-blur-lg supports-backdrop-filter:bg-muted/50">
 						<Button size="icon-lg" variant="ghost">
-							<MagnifyingGlassIcon size={24} />
+							<MagnifyingGlassIcon size={24} weight="bold" />
 						</Button>
 						<Button size="icon-lg" variant="ghost">
-							<ShoppingCartIcon size={24} />
+							<ShoppingCartIcon size={24} weight="bold" />
 						</Button>
 						<BookClassModalTrigger>
 							<Button className="cursor-pointer shadow-lg" size="lg">
@@ -132,12 +132,24 @@ export const Navbar = () => {
 				<div className="flex items-center gap-2 lg:hidden">
 					<div className="flex items-center gap-1 rounded-md border border-card/20 bg-card/95 p-1 backdrop-blur-lg supports-backdrop-filter:bg-muted-foreground/20">
 						<Button size="icon-lg" variant="ghost">
-							<ShoppingCartIcon size={20} />
+							<ShoppingCartIcon
+								className={cn(
+									isHomePage && !isPastHero ? "text-card" : "text-foreground"
+								)}
+								size={20}
+								weight="bold"
+							/>
 						</Button>
 
 						<Drawer position="left">
 							<DrawerTrigger render={<Button size="icon-lg" variant="ghost" />}>
-								<ListIcon size={20} />
+								<ListIcon
+									className={cn(
+										isHomePage && !isPastHero ? "text-card" : "text-foreground"
+									)}
+									size={20}
+									weight="bold"
+								/>
 							</DrawerTrigger>
 							<DrawerPopup showCloseButton variant="inset">
 								<DrawerHeader>

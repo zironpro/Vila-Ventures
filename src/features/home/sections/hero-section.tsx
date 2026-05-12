@@ -16,10 +16,10 @@ export const HeroSection = () => {
 					<div className="py-14 text-center md:text-start lg:py-16">
 						<Badge>Rooted in Joy. Designed for Balance.</Badge>
 
-						<h1 className="mt-2 font-display text-5xl text-card sm:text-5xl lg:text-6xl">
+						<h1 className="mt-2 font-display text-4xl text-card sm:text-5xl md:text-5xl lg:text-6xl">
 							Yoga Classes & Mindful Lifestyle Products in UAE
 						</h1>
-						<p className="mt-3 text-balance text-card text-lg leading-snug sm:text-xl lg:mt-4 lg:text-2xl">
+						<p className="mt-3 text-balance text-card leading-snug sm:text-lg md:text-xl lg:mt-4 lg:text-2xl">
 							Discover mindful yoga classes, creative lifestyle products, and a
 							space where movement, design, and joy come together - with Vila.
 						</p>
@@ -49,13 +49,6 @@ export const HeroSection = () => {
 					<div className="group max-w-full overflow-hidden rounded-lg border border-card/20 bg-card/30 backdrop-blur-lg transition-transform duration-300 ease-out hover:scale-105 supports-backdrop-filter:bg-card/20 sm:max-w-md">
 						<div className="grid grid-cols-[minmax(140px,40%)_1fr] gap-3 p-3 text-card">
 							<div className="relative aspect-square size-full overflow-hidden rounded-md bg-card/40 shadow-md">
-								{/* <video
-									autoPlay
-									className="size-full object-cover"
-									loop
-									muted
-									src="/videos/vila-loop.webm"
-								/> */}
 								<Image
 									alt=""
 									className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
@@ -67,7 +60,7 @@ export const HeroSection = () => {
 								<h2 className="font-display text-base md:text-lg lg:text-xl">
 									Virtual & Physical Yoga
 								</h2>
-								<p className="mt-1.5 text-balance text-base tracking-wide">
+								<p className="mt-1.5 text-balance text-xs tracking-wide sm:text-base">
 									Classes for women, kids, and corporate - plus thoughtfully
 									designed yoga mats, journals, and lifestyle essentials.
 								</p>

@@ -43,7 +43,7 @@ export function Selector() {
 				<div className="flex gap-2">
 					{(["hatha", "vinyasa flow", "kids"] as TypeClass[]).map((type) => (
 						<Button
-							className="flex-1 capitalize"
+							className="w-full flex-1 px-6 capitalize"
 							key={type}
 							onClick={() => {
 								setTypeClass(type);
@@ -53,7 +53,7 @@ export function Selector() {
 							size="lg"
 							variant={typeClass === type ? "default" : "outline"}
 						>
-							{type} Yoga
+							{type} <span className="sr-only sm:not-sr-only">Yoga</span>
 						</Button>
 					))}
 				</div>

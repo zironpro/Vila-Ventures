@@ -137,7 +137,13 @@ export const SCHEDULES: Record<
 export const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
 	virtual: {
 		group: [
-			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 180, maxSlots: 1 },
+			{
+				name: "Starter",
+				classes: 4,
+				frequency: "1 Per Week",
+				price: 180,
+				maxSlots: 1,
+			},
 			{
 				name: "Regular",
 				classes: 8,
@@ -146,17 +152,47 @@ export const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
 				popular: true,
 				maxSlots: 2,
 			},
-			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 420, maxSlots: 3 },
+			{
+				name: "Intensive",
+				classes: 12,
+				frequency: "3 Per Week",
+				price: 420,
+				maxSlots: 3,
+			},
 		],
 		private: [
-			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 350, maxSlots: 1 },
-			{ name: "Regular", classes: 8, frequency: "2 Per Week", price: 650, maxSlots: 2 },
-			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 950, maxSlots: 3 },
+			{
+				name: "Starter",
+				classes: 4,
+				frequency: "1 Per Week",
+				price: 350,
+				maxSlots: 1,
+			},
+			{
+				name: "Regular",
+				classes: 8,
+				frequency: "2 Per Week",
+				price: 650,
+				maxSlots: 2,
+			},
+			{
+				name: "Intensive",
+				classes: 12,
+				frequency: "3 Per Week",
+				price: 950,
+				maxSlots: 3,
+			},
 		],
 	},
 	physical: {
 		group: [
-			{ name: "Starter", classes: 4, frequency: "1 Per Week", price: 250, maxSlots: 1 },
+			{
+				name: "Starter",
+				classes: 4,
+				frequency: "1 Per Week",
+				price: 250,
+				maxSlots: 1,
+			},
 			{
 				name: "Regular",
 				classes: 8,
@@ -165,11 +201,29 @@ export const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
 				popular: true,
 				maxSlots: 2,
 			},
-			{ name: "Intensive", classes: 12, frequency: "3 Per Week", price: 600, maxSlots: 3 },
+			{
+				name: "Intensive",
+				classes: 12,
+				frequency: "3 Per Week",
+				price: 600,
+				maxSlots: 3,
+			},
 		],
 		private: [
-			{ name: "1 Person", classes: 1, frequency: "Per Session", price: 250, maxSlots: 1 },
-			{ name: "2-3 Person", classes: 1, frequency: "Per Person", price: 200, maxSlots: 1 },
+			{
+				name: "1 Person",
+				classes: 1,
+				frequency: "Per Session",
+				price: 250,
+				maxSlots: 1,
+			},
+			{
+				name: "2-3 Person",
+				classes: 1,
+				frequency: "Per Person",
+				price: 200,
+				maxSlots: 1,
+			},
 		],
 	},
 };
@@ -192,7 +246,9 @@ export function MembershipSelectionProvider({
 	const [classType, setClassType] = useState<ClassType>("virtual");
 	const [formatType, setFormatType] = useState<FormatType>("group");
 	const [selectedPlan, setSelectedPlan] = useState<PlanData | null>(null);
-	const [selectedTimeSlots, setSelectedTimeSlots] = useState<ScheduleData[]>([]);
+	const [selectedTimeSlots, setSelectedTimeSlots] = useState<ScheduleData[]>(
+		[]
+	);
 
 	const currentPlans = PLANS[classType][formatType];
 	const currentSchedules = SCHEDULES[typeClass][classType][formatType];
@@ -264,7 +320,7 @@ export function MembershipModal() {
 							<DrawerDescription>{FORM_DESCRIPTION}</DrawerDescription>
 						</DrawerHeader>
 
-						<DrawerPanel className="grid gap-4" scrollable={false}>
+						<DrawerPanel className="grid gap-4">
 							<Selector />
 						</DrawerPanel>
 						<DrawerFooter>
