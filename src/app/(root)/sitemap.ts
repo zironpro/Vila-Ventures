@@ -10,10 +10,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const products = await getProductSlugs();
 
 	const classUrls: MetadataRoute.Sitemap = classes.map((item) => ({
-		url: `${SITE_URL}/shop/${item.slug}`,
+		url: `${SITE_URL}/classes/${item.slug}`,
 		lastModified: new Date(),
 		changeFrequency: "monthly" as const,
-		priority: 0.7,
+		priority: 0.9,
 	}));
 
 	const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
