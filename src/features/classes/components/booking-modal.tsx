@@ -33,8 +33,12 @@ import {
 
 import { useMediaQuery } from "@/hooks/use-media-query";
 
+import { SCHEDULES, type ScheduleData } from "../schedules";
+
 import { BookingFormModal, BookingFormModalTrigger } from "./booking-form";
 import { Selector } from "./plan-selector";
+
+export type { ScheduleData } from "../schedules";
 
 export type TypeClass = "hatha" | "vinyasa flow" | "kids";
 export type ClassType = "virtual" | "physical";
@@ -47,12 +51,6 @@ export interface PlanData {
 	price: number;
 	popular?: boolean;
 	maxSlots: number;
-}
-
-export interface ScheduleData {
-	id: string;
-	day: string;
-	time: string;
 }
 
 interface MembershipSelectionContextValue {
@@ -74,65 +72,7 @@ interface MembershipSelectionContextValue {
 const MembershipSelectionContext =
 	createContext<MembershipSelectionContextValue | null>(null);
 
-export const SCHEDULES: Record<
-	TypeClass,
-	Record<ClassType, Record<FormatType, ScheduleData[]>>
-> = {
-	hatha: {
-		physical: {
-			private: [
-				{ id: "h-p-p-1", day: "Monday", time: "12:00 PM – 1:15 PM" },
-				{ id: "h-p-p-2", day: "Tuesday", time: "12:00 PM – 1:15 PM" },
-				{ id: "h-p-p-3", day: "Wednesday", time: "7:30 PM – 8:45 PM" },
-				{ id: "h-p-p-4", day: "Thursday", time: "10:00 AM – 11:15 AM" },
-				{ id: "h-p-p-5", day: "Friday", time: "12:00 PM – 1:15 PM" },
-				{ id: "h-p-p-6", day: "Saturday", time: "12:00 PM – 1:15 PM" },
-			],
-			group: [],
-		},
-		virtual: {
-			group: [
-				{ id: "h-v-g-1", day: "Monday", time: "7:30 PM – 8:45 PM" },
-				{ id: "h-v-g-2", day: "Tuesday", time: "10:00 AM – 11:15 AM" },
-			],
-			private: [],
-		},
-	},
-	"vinyasa flow": {
-		physical: {
-			group: [
-				{ id: "v-p-g-1", day: "Wednesday", time: "4:00 PM – 5:00 PM" },
-				{ id: "v-p-g-2", day: "Saturday", time: "7:30 PM – 8:45 PM" },
-			],
-			private: [],
-		},
-		virtual: {
-			group: [
-				{ id: "v-v-g-1", day: "Tuesday", time: "4:00 PM – 5:00 PM" },
-				{ id: "v-v-g-2", day: "Friday", time: "4:00 PM – 5:00 PM" },
-				{ id: "v-v-g-3", day: "Thursday", time: "7:30 PM – 8:45 PM" },
-			],
-			private: [],
-		},
-	},
-	kids: {
-		physical: {
-			group: [
-				{ id: "k-p-g-1", day: "Monday", time: "4:00 PM – 5:00 PM" },
-				{ id: "k-p-g-2", day: "Thursday", time: "4:00 PM – 5:00 PM" },
-				{ id: "k-p-g-3", day: "Saturday", time: "4:00 PM – 5:00 PM" },
-			],
-			private: [
-				{ id: "k-p-p-1", day: "Tuesday", time: "7:30 PM – 8:45 PM" },
-				{ id: "k-p-p-2", day: "Friday", time: "7:30 PM – 8:45 PM" },
-			],
-		},
-		virtual: {
-			group: [],
-			private: [],
-		},
-	},
-};
+export { SCHEDULES, SCHEDULES_BACKUP } from "../schedules";
 
 export const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
 	virtual: {
