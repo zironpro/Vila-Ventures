@@ -5,9 +5,14 @@ import {
 	revalidateClassPlansAfterChange,
 	revalidateClassPlansAfterDelete,
 } from "@/payload/collections/class-plans/hooks/revalidateClassPlans";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 export const ClassPlans: CollectionConfig = {
 	slug: "class-plans",
+	labels: {
+		singular: "Class Plan",
+		plural: "Class Plans",
+	},
 	access: {
 		create: adminOnly,
 		delete: adminOnly,
@@ -16,142 +21,135 @@ export const ClassPlans: CollectionConfig = {
 	},
 	admin: {
 		useAsTitle: "planName",
-		group: "Content",
-		defaultColumns: ["planName", "pricingType", "deliveryMode", "priceLabel"],
+		group: ADMIN_GROUPS.CLASSES_BOOKING,
+		description:
+			"Pricing plans shown in the booking modal. Filtered by delivery mode (virtual/physical) and format (group/private).",
+		defaultColumns: [
+			"planName",
+			"deliveryMode",
+			"pricingType",
+			"classCount",
+			"price",
+		],
 	},
 	hooks: {
 		afterChange: [revalidateClassPlansAfterChange],
 		afterDelete: [revalidateClassPlansAfterDelete],
 	},
 	orderable: true,
-
 	defaultPopulate: {
 		planName: true,
 		pricingType: true,
 		deliveryMode: true,
-		classesLabel: true,
-		frequencyLabel: true,
-		priceLabel: true,
-		maxStudents: true,
+		classCount: true,
+		frequency: true,
+		price: true,
+		maxSlots: true,
+		priceSubLabel: true,
 		isBestValue: true,
 	},
 	fields: [
 		{
-			type: "group",
+			name: "planName",
+			type: "text",
+			required: true,
 			admin: {
-				description: "Core details for this class plan.",
+				description: "Short, clear plan name shown to users.",
+				placeholder: "e.g. Starter",
 			},
+		},
+		{
+			type: "row",
 			fields: [
 				{
-					name: "planName",
+					name: "deliveryMode",
+					type: "select",
+					index: true,
+					required: true,
+					defaultValue: "virtual",
+					admin: {
+						width: "50%",
+						description:
+							"Virtual or physical — must match step 2 in the booking modal.",
+					},
+					options: [
+						{ label: "Virtual", value: "virtual" },
+						{ label: "Physical", value: "physical" },
+					],
+				},
+				{
+					name: "pricingType",
+					type: "select",
+					index: true,
+					required: true,
+					defaultValue: "group",
+					admin: {
+						width: "50%",
+						description:
+							"Group or private — must match step 3 in the booking modal.",
+					},
+					options: [
+						{ label: "Group", value: "group" },
+						{ label: "Private", value: "private" },
+					],
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "classCount",
+					type: "number",
+					required: true,
+					min: 1,
+					admin: {
+						width: "25%",
+						description: "Number of classes included (used for display and leads).",
+					},
+				},
+				{
+					name: "maxSlots",
+					type: "number",
+					required: true,
+					min: 1,
+					defaultValue: 1,
+					admin: {
+						width: "25%",
+						description:
+							"How many time slots the user must select when booking.",
+					},
+				},
+				{
+					name: "frequency",
 					type: "text",
 					required: true,
 					admin: {
-						description: "Short, clear plan name shown to users.",
-						placeholder: "e.g. Starter Group Plan",
+						width: "25%",
+						description: "Frequency label shown on the plan card.",
+						placeholder: "e.g. 1 Per Week",
+					},
+				},
+				{
+					name: "price",
+					type: "number",
+					required: true,
+					min: 0,
+					admin: {
+						width: "25%",
+						description: "Price in AED (shown with currency icon).",
 					},
 				},
 			],
 		},
 		{
-			type: "group",
+			name: "priceSubLabel",
+			type: "text",
 			admin: {
 				description:
-					"Configure pricing model, delivery mode, and display labels.",
+					"Optional small label under the price (e.g. Per Person for shared private plans).",
+				placeholder: "e.g. Per Person",
 			},
-			fields: [
-				{
-					type: "row",
-					fields: [
-						{
-							name: "pricingType",
-							type: "select",
-							index: true,
-							required: true,
-							defaultValue: "group",
-							admin: {
-								width: "50%",
-								description: "Choose whether this is a group or private plan.",
-							},
-							options: [
-								{
-									label: "Group",
-									value: "group",
-								},
-								{
-									label: "Private",
-									value: "private",
-								},
-							],
-						},
-						{
-							name: "deliveryMode",
-							type: "select",
-							required: true,
-							defaultValue: "virtual",
-							admin: {
-								width: "50%",
-								description: "How this plan is delivered.",
-							},
-							options: [
-								{
-									label: "Virtual",
-									value: "virtual",
-								},
-								{
-									label: "Physical",
-									value: "physical",
-								},
-							],
-						},
-					],
-				},
-				{
-					type: "row",
-					fields: [
-						{
-							name: "classes",
-							type: "text",
-							required: true,
-							admin: {
-								width: "33.33%",
-								description: "Display label for number of classes.",
-								placeholder: "e.g. 4 Classes",
-							},
-						},
-						{
-							name: "frequency",
-							type: "text",
-							required: true,
-							admin: {
-								width: "33.33%",
-								description: "Display label for frequency.",
-								placeholder: "e.g. 1 Per Week",
-							},
-						},
-						{
-							name: "price",
-							type: "text",
-							required: true,
-							admin: {
-								width: "33.33%",
-								placeholder: "e.g. 180",
-							},
-						},
-					],
-				},
-				{
-					name: "maxStudents",
-					type: "text",
-					admin: {
-						description:
-							"Only shown for private plans. Example: Max 3 Students",
-						placeholder: "e.g. Max 3 Students",
-						condition: (_, siblingData) =>
-							siblingData?.pricingType === "private",
-					},
-				},
-			],
 		},
 		{
 			type: "group",
@@ -164,11 +162,9 @@ export const ClassPlans: CollectionConfig = {
 					name: "isBestValue",
 					type: "checkbox",
 					label: "Best Value",
-				},
-				{
-					name: "isPopular",
-					type: "checkbox",
-					label: "Popular",
+					admin: {
+						description: "Shows the Best Value badge on this plan card.",
+					},
 				},
 			],
 		},

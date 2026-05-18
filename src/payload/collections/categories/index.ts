@@ -6,6 +6,7 @@ import {
 	revalidateCategoriesAfterChange,
 	revalidateCategoriesAfterDelete,
 } from "@/payload/collections/categories/hooks/revalidateCategories";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 export const Categories: CollectionConfig = {
 	slug: "categories",
@@ -17,7 +18,7 @@ export const Categories: CollectionConfig = {
 	},
 	admin: {
 		useAsTitle: "title",
-		group: "Content",
+		group: ADMIN_GROUPS.SHOP,
 	},
 	hooks: {
 		afterChange: [revalidateCategoriesAfterChange],

@@ -10,6 +10,7 @@ async function safeRevalidatePath(path: string): Promise<void> {
 }
 
 async function revalidateClassPlanPages() {
+	await safeRevalidatePath("/");
 	await safeRevalidatePath("/classes");
 	await safeRevalidatePath("/sitemap.xml");
 }

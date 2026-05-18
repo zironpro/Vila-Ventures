@@ -1,10 +1,9 @@
-import Link from "next/link";
-
 import {
 	ArrowUpRightIcon,
 	HandWavingIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
+import { TrackedCtaLink } from "@/components/analytics/tracked-cta-link";
 import {
 	Accordion,
 	AccordionItem,
@@ -42,12 +41,14 @@ export const ClassesFaqSection = () => {
 						We're happy to help — whether it's about a specific class, your
 						first session, or anything else.
 					</p>
-					<Link
+					<TrackedCtaLink
 						className="flex items-center justify-between gap-2"
+						ctaLabel="Contact us"
 						href="/contact"
+						location="faq"
 					>
 						Contact us <ArrowUpRightIcon />
-					</Link>
+					</TrackedCtaLink>
 				</div>
 			</div>
 			<Accordion className="w-full space-y-3" defaultValue={["01"]}>

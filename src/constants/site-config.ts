@@ -1,3 +1,8 @@
+import {
+	FacebookLogoIcon,
+	InstagramLogoIcon,
+} from "@phosphor-icons/react/dist/ssr";
+
 export const SITE_URL = "https://vilaventures.ae" as const;
 
 export const SITE_CONFIG = {
@@ -17,5 +22,11 @@ export const SOCIALS = [
 	{
 		name: "Instagram",
 		url: "https://instagram.com/vilaventures._/",
+		Icon: InstagramLogoIcon,
+	},
+	{
+		name: "Facebook",
+		url: "https://www.facebook.com/profile.php?id=61589107060594",
+		Icon: FacebookLogoIcon,
 	},
 ] as const;

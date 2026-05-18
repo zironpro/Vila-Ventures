@@ -30,6 +30,7 @@ import {
 	ThreeItemGrid,
 } from "@/payload/features/content/blocks/configs";
 import { populatePublishedAt } from "@/payload/features/content/hooks/populatePublishedAt";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 import {
 	revalidateBlogAfterChange,
@@ -45,7 +46,7 @@ export const Blogs: CollectionConfig = {
 		update: adminOnly,
 	},
 	admin: {
-		group: "Content",
+		group: ADMIN_GROUPS.CONTENT,
 		useAsTitle: "title",
 		defaultColumns: ["title", "author", "_status", "publishedAt"],
 	},

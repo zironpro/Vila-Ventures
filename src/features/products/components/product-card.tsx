@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { Media } from "@/components/media";
@@ -8,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Currency } from "@/assets/icons/currency";
 
 import { Product } from "@/payload-types";
+
+import { ProductCardLink } from "./product-card-link";
 
 interface ProductCardProps {
 	product: Product;
@@ -45,7 +45,17 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 	);
 
 	if (product.slug) {
-		return <Link href={`/shop/${product.slug}`}>{content}</Link>;
+		return (
+			<ProductCardLink
+				href={`/shop/${product.slug}`}
+				price={product.price}
+				productId={product.id}
+				slug={product.slug}
+				title={product.title}
+			>
+				{content}
+			</ProductCardLink>
+		);
 	}
 
 	return content;

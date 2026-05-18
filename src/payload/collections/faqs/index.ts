@@ -5,6 +5,7 @@ import {
 	revalidateFaqsAfterChange,
 	revalidateFaqsAfterDelete,
 } from "@/payload/collections/faqs/hooks/revalidateFaqs";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 export const Faqs: CollectionConfig = {
 	slug: "faqs",
@@ -16,7 +17,7 @@ export const Faqs: CollectionConfig = {
 	},
 	admin: {
 		useAsTitle: "question",
-		group: "Content",
+		group: ADMIN_GROUPS.CONTENT,
 		defaultColumns: ["question", "sortOrder", "updatedAt"],
 	},
 	hooks: {

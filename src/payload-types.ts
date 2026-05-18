@@ -72,7 +72,6 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
     classes: Class;
     'class-plans': ClassPlan;
     'class-booking-leads': ClassBookingLead;
@@ -81,6 +80,7 @@ export interface Config {
     categories: Category;
     tags: Tag;
     media: Media;
+    users: User;
     addresses: Address;
     variants: Variant;
     variantTypes: VariantType;
@@ -105,7 +105,6 @@ export interface Config {
     };
   };
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
     classes: ClassesSelect<false> | ClassesSelect<true>;
     'class-plans': ClassPlansSelect<false> | ClassPlansSelect<true>;
     'class-booking-leads': ClassBookingLeadsSelect<false> | ClassBookingLeadsSelect<true>;
@@ -114,6 +113,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
     variants: VariantsSelect<false> | VariantsSelect<true>;
     variantTypes: VariantTypesSelect<false> | VariantTypesSelect<true>;
@@ -176,6 +176,199 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * Manage each class card and its dedicated class detail page content.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "classes".
+ */
+export interface Class {
+  id: number;
+  _order?: string | null;
+  title: string;
+  tagline: string;
+  description: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  image: number | Media;
+  format?: string | null;
+  bestFor?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * Pricing plans shown in the booking modal. Filtered by delivery mode (virtual/physical) and format (group/private).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "class-plans".
+ */
+export interface ClassPlan {
+  id: number;
+  _order?: string | null;
+  /**
+   * Short, clear plan name shown to users.
+   */
+  planName: string;
+  /**
+   * Virtual or physical — must match step 2 in the booking modal.
+   */
+  deliveryMode: 'virtual' | 'physical';
+  /**
+   * Group or private — must match step 3 in the booking modal.
+   */
+  pricingType: 'group' | 'private';
+  /**
+   * Number of classes included (used for display and leads).
+   */
+  classCount: number;
+  /**
+   * How many time slots the user must select when booking.
+   */
+  maxSlots: number;
+  /**
+   * Frequency label shown on the plan card.
+   */
+  frequency: string;
+  /**
+   * Price in AED (shown with currency icon).
+   */
+  price: number;
+  /**
+   * Optional small label under the price (e.g. Per Person for shared private plans).
+   */
+  priceSubLabel?: string | null;
+  /**
+   * Shows the Best Value badge on this plan card.
+   */
+  isBestValue?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "class-booking-leads".
+ */
+export interface ClassBookingLead {
+  id: number;
+  /**
+   * Lead contact name submitted from the booking form.
+   */
+  fullName: string;
+  email: string;
+  phone: string;
+  /**
+   * Additional context shared by the lead.
+   */
+  notes?: string | null;
+  /**
+   * Plan details captured at the time of lead submission.
+   */
+  selectedPlan: {
+    name: string;
+    classes: number;
+    frequency: string;
+    price: number;
+    classType: 'virtual' | 'physical';
+    formatType: 'group' | 'private';
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blogs".
+ */
+export interface Blog {
+  id: number;
+  title: string;
+  excerpt: string;
+  featuredImage: number | Media;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  author: number | User;
+  categories?: (number | Category)[] | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -344,25 +537,6 @@ export interface Product {
   createdAt: string;
   deletedAt?: string | null;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -575,169 +749,6 @@ export interface Address {
   createdAt: string;
 }
 /**
- * Manage each class card and its dedicated class detail page content.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "classes".
- */
-export interface Class {
-  id: number;
-  _order?: string | null;
-  title: string;
-  tagline: string;
-  description: string;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  image: number | Media;
-  format?: string | null;
-  bestFor?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "class-plans".
- */
-export interface ClassPlan {
-  id: number;
-  _order?: string | null;
-  /**
-   * Short, clear plan name shown to users.
-   */
-  planName: string;
-  /**
-   * Choose whether this is a group or private plan.
-   */
-  pricingType: 'group' | 'private';
-  /**
-   * How this plan is delivered.
-   */
-  deliveryMode: 'virtual' | 'physical';
-  /**
-   * Display label for number of classes.
-   */
-  classes: string;
-  /**
-   * Display label for frequency.
-   */
-  frequency: string;
-  price: string;
-  /**
-   * Only shown for private plans. Example: Max 3 Students
-   */
-  maxStudents?: string | null;
-  isBestValue?: boolean | null;
-  isPopular?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "class-booking-leads".
- */
-export interface ClassBookingLead {
-  id: number;
-  /**
-   * Lead contact name submitted from the booking form.
-   */
-  fullName: string;
-  email: string;
-  phone: string;
-  /**
-   * Additional context shared by the lead.
-   */
-  notes?: string | null;
-  /**
-   * Plan details captured at the time of lead submission.
-   */
-  selectedPlan: {
-    name: string;
-    classes: number;
-    frequency: string;
-    price: number;
-    classType: 'virtual' | 'physical';
-    formatType: 'group' | 'private';
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blogs".
- */
-export interface Blog {
-  id: number;
-  title: string;
-  excerpt: string;
-  featuredImage: number | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  meta?: {
-    title?: string | null;
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media;
-    description?: string | null;
-  };
-  publishedAt?: string | null;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  author: number | User;
-  categories?: (number | Category)[] | null;
-  tags?:
-    | {
-        tag?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqs".
  */
@@ -780,10 +791,6 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
         relationTo: 'classes';
         value: number | Class;
       } | null)
@@ -814,6 +821,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null)
     | ({
         relationTo: 'addresses';
@@ -891,33 +902,6 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  roles?: T;
-  orders?: T;
-  cart?: T;
-  addresses?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "classes_select".
  */
 export interface ClassesSelect<T extends boolean = true> {
@@ -948,14 +932,14 @@ export interface ClassesSelect<T extends boolean = true> {
 export interface ClassPlansSelect<T extends boolean = true> {
   _order?: T;
   planName?: T;
-  pricingType?: T;
   deliveryMode?: T;
-  classes?: T;
+  pricingType?: T;
+  classCount?: T;
+  maxSlots?: T;
   frequency?: T;
   price?: T;
-  maxStudents?: T;
+  priceSubLabel?: T;
   isBestValue?: T;
-  isPopular?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1062,6 +1046,33 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
+  orders?: T;
+  cart?: T;
+  addresses?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

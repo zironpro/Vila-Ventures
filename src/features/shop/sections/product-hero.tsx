@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { ArrowLeftIcon, ShoppingBagIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowLeftIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { RichText } from "@/components/rich-text";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,7 @@ import { Currency } from "@/assets/icons/currency";
 
 import { Product } from "@/payload-types";
 
+import { AddToBagButton } from "../components/add-to-bag-button";
 import { ProductGallery } from "./components/gallery";
 
 interface ProductHeroProps {
@@ -88,10 +89,14 @@ export const ProductHero = ({ product }: ProductHeroProps) => {
 							)}
 
 							<div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-								<Button className="gap-3" size="lg">
-									<ShoppingBagIcon weight="fill" />
-									Add to bag
-								</Button>
+								{product.slug ? (
+									<AddToBagButton
+										price={product.price}
+										productId={product.id}
+										slug={product.slug}
+										title={product.title}
+									/>
+								) : null}
 								<Button
 									nativeButton={false}
 									render={<Link href="/shop" />}

@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { z } from "zod";
 
+import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
+import { trackServerEvent } from "@/lib/analytics/openpanel-server";
 import { payload } from "@/payload";
 
 const leadSchema = z.object({
@@ -40,6 +42,14 @@ export async function POST(request: Request) {
 				notes: parsed.data.notes || undefined,
 				selectedPlan: parsed.data.selectedPlan,
 			},
+		});
+
+		trackServerEvent(ANALYTICS_EVENTS.bookingLeadSubmitted, {
+			plan_name: parsed.data.selectedPlan.name,
+			price: parsed.data.selectedPlan.price,
+			class_type: parsed.data.selectedPlan.classType,
+			format_type: parsed.data.selectedPlan.formatType,
+			source: "server",
 		});
 
 		return NextResponse.json({ ok: true });

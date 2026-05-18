@@ -2,6 +2,7 @@ import type { CollectionConfig } from "payload";
 import { slugField } from "payload";
 
 import { adminOnly } from "@/payload/access/shared/adminOnly";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 export const Tags: CollectionConfig = {
 	slug: "tags",
@@ -14,7 +15,7 @@ export const Tags: CollectionConfig = {
 	admin: {
 		hidden: true,
 		useAsTitle: "title",
-		group: "Content",
+		group: ADMIN_GROUPS.SHOP,
 	},
 	fields: [
 		{

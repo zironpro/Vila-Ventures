@@ -6,6 +6,8 @@ import { checkRole } from "@/payload/access/shared/checkRole";
 import { publicAccess } from "@/payload/access/shared/publicAccess";
 import { adminOrSelf } from "@/payload/access/users/adminOrSelf";
 
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
+
 import { ensureFirstUserIsAdmin } from "./hooks/ensureFirstUserIsAdmin";
 
 export const Users: CollectionConfig = {
@@ -19,7 +21,7 @@ export const Users: CollectionConfig = {
 		update: adminOrSelf,
 	},
 	admin: {
-		group: "Users",
+		group: ADMIN_GROUPS.USERS,
 		defaultColumns: ["name", "email", "roles"],
 		useAsTitle: "name",
 	},

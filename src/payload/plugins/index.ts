@@ -8,6 +8,7 @@ import { GenerateTitle, GenerateURL } from "@payloadcms/plugin-seo/types";
 // 	HeadingFeature,
 // 	lexicalEditor,
 // } from "@payloadcms/richtext-lexical";
+import type { CollectionConfig } from "payload";
 import { Plugin } from "payload";
 
 import { getServerSideURL } from "@/lib/utils/getURL";
@@ -17,6 +18,8 @@ import { adminOnlyFieldAccess } from "@/payload/access/shared/adminOnlyFieldAcce
 import { customerOnlyFieldAccess } from "@/payload/access/shared/customerOnlyFieldAccess";
 import { isAdmin } from "@/payload/access/shared/isAdmin";
 import { ProductsCollection } from "@/payload/collections/products";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
+import { hideVariantCollectionsPlugin } from "@/payload/plugins/hide-variant-collections";
 import { Product } from "@/payload-types";
 
 const generateTitle: GenerateTitle<Product> = ({ doc }) => {
@@ -36,53 +39,7 @@ export const plugins: Plugin[] = [
 		generateTitle,
 		generateURL,
 	}),
-	// formBuilderPlugin({
-	// 	fields: {
-	// 		payment: false,
-	// 	},
-	// 	formSubmissionOverrides: {
-	// 		access: {
-	// 			delete: isAdmin,
-	// 			read: isAdmin,
-	// 			update: isAdmin,
-	// 		},
-	// 		admin: {
-	// 			group: "Content",
-	// 		},
-	// 	},
-	// 	formOverrides: {
-	// 		access: {
-	// 			delete: isAdmin,
-	// 			read: isAdmin,
-	// 			update: isAdmin,
-	// 			create: isAdmin,
-	// 		},
-	// 		admin: {
-	// 			group: "Content",
-	// 		},
-	// 		fields: ({ defaultFields }) => {
-	// 			return defaultFields.map((field) => {
-	// 				if ("name" in field && field.name === "confirmationMessage") {
-	// 					return {
-	// 						...field,
-	// 						editor: lexicalEditor({
-	// 							features: ({ rootFeatures }) => {
-	// 								return [
-	// 									...rootFeatures,
-	// 									FixedToolbarFeature(),
-	// 									HeadingFeature({
-	// 										enabledHeadingSizes: ["h1", "h2", "h3", "h4"],
-	// 									}),
-	// 								];
-	// 							},
-	// 						}),
-	// 					};
-	// 				}
-	// 				return field;
-	// 			});
-	// 		},
-	// 	},
-	// }),
+
 	ecommercePlugin({
 		access: {
 			adminOnlyFieldAccess,
@@ -97,6 +54,10 @@ export const plugins: Plugin[] = [
 		orders: {
 			ordersCollectionOverride: ({ defaultCollection }) => ({
 				...defaultCollection,
+				admin: {
+					...defaultCollection.admin,
+					group: ADMIN_GROUPS.SHOP,
+				},
 				fields: [
 					...defaultCollection.fields,
 					{
@@ -122,6 +83,45 @@ export const plugins: Plugin[] = [
 				],
 			}),
 		},
+		carts: {
+			cartsCollectionOverride: ({
+				defaultCollection,
+			}: {
+				defaultCollection: CollectionConfig;
+			}) => ({
+				...defaultCollection,
+				admin: {
+					...defaultCollection.admin,
+					group: ADMIN_GROUPS.SHOP,
+				},
+			}),
+		},
+		transactions: {
+			transactionsCollectionOverride: ({
+				defaultCollection,
+			}: {
+				defaultCollection: CollectionConfig;
+			}) => ({
+				...defaultCollection,
+				admin: {
+					...defaultCollection.admin,
+					group: ADMIN_GROUPS.SHOP,
+				},
+			}),
+		},
+		addresses: {
+			addressesCollectionOverride: ({
+				defaultCollection,
+			}: {
+				defaultCollection: CollectionConfig;
+			}) => ({
+				...defaultCollection,
+				admin: {
+					...defaultCollection.admin,
+					group: ADMIN_GROUPS.SHOP,
+				},
+			}),
+		},
 		payments: {
 			paymentMethods: [
 				stripeAdapter({
@@ -135,4 +135,5 @@ export const plugins: Plugin[] = [
 			productsCollectionOverride: ProductsCollection,
 		},
 	}),
+	hideVariantCollectionsPlugin(),
 ];

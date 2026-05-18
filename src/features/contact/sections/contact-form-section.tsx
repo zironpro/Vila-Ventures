@@ -8,6 +8,8 @@ import {
 	MapPinIcon,
 } from "@phosphor-icons/react";
 
+import { TrackedCtaLink } from "@/components/analytics/tracked-cta-link";
+
 import { ContactForm } from "../components/contact-form";
 
 const CONTACT_DETAILS = [
@@ -87,12 +89,14 @@ export const ContactFormSection = () => {
 							about your goals, answer your questions, and figure out the best
 							next step together.
 						</p>
-						<Link
+						<TrackedCtaLink
 							className="mt-5 inline-flex h-10 items-center justify-center rounded-lg bg-primary px-5 font-medium text-primary-foreground text-sm transition hover:bg-primary/90"
+							ctaLabel="Book a discovery call"
 							href="/classes"
+							location="contact_sidebar"
 						>
 							Book a discovery call
-						</Link>
+						</TrackedCtaLink>
 					</div>
 
 					<div className="rounded-xl bg-primary p-6 text-background shadow-md sm:p-8">

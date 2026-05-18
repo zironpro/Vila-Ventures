@@ -46,10 +46,22 @@ export const getClassSlugs = async () => {
 export const getClassPricingPlans = async () => {
 	const { docs } = await payload.find({
 		collection: "class-plans",
-		depth: 1,
+		depth: 0,
 		limit: 100,
 		pagination: false,
-		sort: "sortOrder",
+		sort: "_order",
+		select: {
+			planName: true,
+			deliveryMode: true,
+			pricingType: true,
+			classCount: true,
+			frequency: true,
+			price: true,
+			maxSlots: true,
+			priceSubLabel: true,
+			isBestValue: true,
+			_order: true,
+		},
 	});
 
 	return docs;

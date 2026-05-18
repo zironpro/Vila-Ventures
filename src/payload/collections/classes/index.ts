@@ -21,6 +21,7 @@ import {
 	revalidateClassesAfterChange,
 	revalidateClassesAfterDelete,
 } from "@/payload/collections/classes/hooks/revalidateClasses";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 export const Classes: CollectionConfig = {
 	slug: "classes",
@@ -33,7 +34,7 @@ export const Classes: CollectionConfig = {
 	orderable: true,
 	admin: {
 		useAsTitle: "title",
-		group: "Content",
+		group: ADMIN_GROUPS.CLASSES_BOOKING,
 		description:
 			"Manage each class card and its dedicated class detail page content.",
 		defaultColumns: ["title", "slug", "tagline", "updatedAt"],

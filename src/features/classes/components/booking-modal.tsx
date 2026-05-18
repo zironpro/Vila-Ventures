@@ -4,9 +4,12 @@ import {
 	createContext,
 	type Dispatch,
 	type SetStateAction,
+	useCallback,
 	useContext,
 	useState,
 } from "react";
+
+import { usePathname } from "next/navigation";
 
 import {
 	Dialog,
@@ -32,26 +35,31 @@ import {
 } from "@/components/ui/drawer";
 
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
+import {
+	getBookingSourceFromPathname,
+	getClassSlugFromPathname,
+} from "@/lib/analytics/get-booking-source";
+import { useTrackEvent } from "@/lib/analytics/use-track-event";
 
 import { SCHEDULES, type ScheduleData } from "../schedules";
-
+import type {
+	ClassType,
+	FormatType,
+	PlanData,
+	PlansMap,
+	TypeClass,
+} from "../types/plans";
 import { BookingFormModal, BookingFormModalTrigger } from "./booking-form";
 import { Selector } from "./plan-selector";
 
 export type { ScheduleData } from "../schedules";
-
-export type TypeClass = "hatha" | "vinyasa flow" | "kids";
-export type ClassType = "virtual" | "physical";
-export type FormatType = "group" | "private";
-
-export interface PlanData {
-	name: string;
-	classes: number;
-	frequency: string;
-	price: number;
-	popular?: boolean;
-	maxSlots: number;
-}
+export type {
+	ClassType,
+	FormatType,
+	PlanData,
+	TypeClass,
+} from "../types/plans";
 
 interface MembershipSelectionContextValue {
 	typeClass: TypeClass;
@@ -74,100 +82,6 @@ const MembershipSelectionContext =
 
 export { SCHEDULES, SCHEDULES_BACKUP } from "../schedules";
 
-export const PLANS: Record<ClassType, Record<FormatType, PlanData[]>> = {
-	virtual: {
-		group: [
-			{
-				name: "Starter",
-				classes: 4,
-				frequency: "1 Per Week",
-				price: 180,
-				maxSlots: 1,
-			},
-			{
-				name: "Regular",
-				classes: 8,
-				frequency: "2 Per Week",
-				price: 300,
-				popular: true,
-				maxSlots: 2,
-			},
-			{
-				name: "Intensive",
-				classes: 12,
-				frequency: "3 Per Week",
-				price: 420,
-				maxSlots: 3,
-			},
-		],
-		private: [
-			{
-				name: "Starter",
-				classes: 4,
-				frequency: "1 Per Week",
-				price: 350,
-				maxSlots: 1,
-			},
-			{
-				name: "Regular",
-				classes: 8,
-				frequency: "2 Per Week",
-				price: 650,
-				maxSlots: 2,
-			},
-			{
-				name: "Intensive",
-				classes: 12,
-				frequency: "3 Per Week",
-				price: 950,
-				maxSlots: 3,
-			},
-		],
-	},
-	physical: {
-		group: [
-			{
-				name: "Starter",
-				classes: 4,
-				frequency: "1 Per Week",
-				price: 250,
-				maxSlots: 1,
-			},
-			{
-				name: "Regular",
-				classes: 8,
-				frequency: "2 Per Week",
-				price: 450,
-				popular: true,
-				maxSlots: 2,
-			},
-			{
-				name: "Intensive",
-				classes: 12,
-				frequency: "3 Per Week",
-				price: 600,
-				maxSlots: 3,
-			},
-		],
-		private: [
-			{
-				name: "1 Person",
-				classes: 1,
-				frequency: "Per Session",
-				price: 250,
-				maxSlots: 1,
-			},
-			{
-				name: "2-3 Person",
-				classes: 1,
-				frequency: "Per Person",
-				price: 200,
-				maxSlots: 1,
-			},
-		],
-	},
-};
-
 interface PlansModalProps {
 	children: React.ReactElement;
 }
@@ -177,9 +91,11 @@ export const FORM_DESCRIPTION = "Flexible options for your wellness journey";
 
 export function MembershipSelectionProvider({
 	children,
+	plans,
 	onCloseAllModals,
 }: {
 	children: React.ReactNode;
+	plans: PlansMap;
 	onCloseAllModals: () => void;
 }) {
 	const [typeClass, setTypeClass] = useState<TypeClass>("hatha");
@@ -190,7 +106,7 @@ export function MembershipSelectionProvider({
 		[]
 	);
 
-	const currentPlans = PLANS[classType][formatType];
+	const currentPlans = plans[classType][formatType];
 	const currentSchedules = SCHEDULES[typeClass][classType][formatType];
 
 	return (
@@ -241,19 +157,36 @@ export function BookClassModalTrigger({ children }: PlansModalProps) {
 	return <DialogTrigger handle={bookClassDialogHandle} render={children} />;
 }
 
-export function MembershipModal() {
+export function MembershipModal({ plans }: { plans: PlansMap }) {
 	const isMobile = useMediaQuery("max-md");
 	const [open, setOpen] = useState(false);
+	const pathname = usePathname();
+	const { trackEvent } = useTrackEvent();
+
+	const handleOpenChange = useCallback(
+		(nextOpen: boolean) => {
+			setOpen(nextOpen);
+			if (nextOpen) {
+				trackEvent(ANALYTICS_EVENTS.bookingModalOpened, {
+					source: getBookingSourceFromPathname(pathname),
+					class_slug: getClassSlugFromPathname(pathname),
+				});
+			}
+		},
+		[pathname, trackEvent]
+	);
 
 	if (isMobile) {
 		return (
-			<MembershipSelectionProvider onCloseAllModals={() => setOpen(false)}>
+			<MembershipSelectionProvider
+				onCloseAllModals={() => setOpen(false)}
+				plans={plans}
+			>
 				<Drawer
 					handle={bookClassDrawerHandle}
-					onOpenChange={setOpen}
+					onOpenChange={handleOpenChange}
 					open={open}
 				>
-					{/* <DrawerTrigger render={trigger} /> */}
 					<DrawerPopup showBar>
 						<DrawerHeader>
 							<DrawerTitle>{FORM_TITLE}</DrawerTitle>
@@ -274,9 +207,15 @@ export function MembershipModal() {
 	}
 
 	return (
-		<MembershipSelectionProvider onCloseAllModals={() => setOpen(false)}>
-			<Dialog handle={bookClassDialogHandle} onOpenChange={setOpen} open={open}>
-				{/* <DialogTrigger render={trigger} /> */}
+		<MembershipSelectionProvider
+			onCloseAllModals={() => setOpen(false)}
+			plans={plans}
+		>
+			<Dialog
+				handle={bookClassDialogHandle}
+				onOpenChange={handleOpenChange}
+				open={open}
+			>
 				<DialogPopup>
 					<DialogHeader className="border-b">
 						<DialogTitle>{FORM_TITLE}</DialogTitle>

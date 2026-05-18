@@ -11,7 +11,9 @@ import { Providers } from "@/components/providers";
 import { inter, serif } from "@/assets/fonts";
 
 import { SITE_URL } from "@/constants/site-config";
+import { getClassPricingPlans } from "@/features/classes/actions";
 import { MembershipModal } from "@/features/classes/components/booking-modal";
+import { mapClassPlansToGrouped } from "@/features/classes/lib/map-class-plans";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -88,11 +90,14 @@ export const metadata: Metadata = {
 	},
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const classPlans = await getClassPricingPlans();
+	const plansByType = mapClassPlansToGrouped(classPlans);
+
 	return (
 		<html
 			className={cn(
@@ -110,7 +115,7 @@ export default function RootLayout({
 					<Footer />
 					<Toaster position="bottom-right" richColors />
 					<BreakpointIndicator />
-					<MembershipModal />
+					<MembershipModal plans={plansByType} />
 				</Providers>
 			</body>
 		</html>

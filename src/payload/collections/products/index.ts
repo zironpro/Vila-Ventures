@@ -15,6 +15,8 @@ import {
 } from "@payloadcms/richtext-lexical";
 import { slugField } from "payload";
 
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
+
 import {
 	revalidateShopAfterChange,
 	revalidateShopAfterDelete,
@@ -37,6 +39,7 @@ export const ProductsCollection: CollectionOverride = ({
 	},
 	admin: {
 		...defaultCollection?.admin,
+		group: ADMIN_GROUPS.SHOP,
 		defaultColumns: ["title", "enableVariants", "_status", "variants.variants"],
 		useAsTitle: "title",
 	},

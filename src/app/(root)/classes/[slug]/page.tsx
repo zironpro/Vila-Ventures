@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 
+import { ClassViewTracker } from "@/components/analytics/class-view-tracker";
 import { ProgressiveBlur } from "@/components/common/progressive-blur";
 import { Cta } from "@/components/layout/cta";
 import { RichText } from "@/components/rich-text";
@@ -189,6 +190,16 @@ export default async function ClassContentPage({ params }: PageProps) {
 	return (
 		<>
 			<JsonLd data={jsonLd} />
+			{item.slug ? (
+				<ClassViewTracker
+					best_for={item.bestFor ?? undefined}
+					class_id={item.id}
+					format={item.format ?? undefined}
+					slug={item.slug}
+					tagline={item.tagline ?? undefined}
+					title={item.title}
+				/>
+			) : null}
 			<main className="relative overflow-hidden bg-background">
 				<div
 					aria-hidden

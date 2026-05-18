@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { adminOnly } from "@/payload/access/shared/adminOnly";
+import { ADMIN_GROUPS } from "@/payload/constants/admin-groups";
 
 export const ClassBookingLeads: CollectionConfig = {
 	slug: "class-booking-leads",
@@ -10,7 +11,7 @@ export const ClassBookingLeads: CollectionConfig = {
 	},
 	admin: {
 		useAsTitle: "fullName",
-		group: "Leads",
+		group: ADMIN_GROUPS.CLASSES_BOOKING,
 		defaultColumns: ["fullName", "email", "phone", "createdAt", "updatedAt"],
 		pagination: {
 			defaultLimit: 20,

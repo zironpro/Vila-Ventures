@@ -45,7 +45,6 @@ export default buildConfig({
 		},
 	},
 	collections: [
-		Users,
 		Classes,
 		ClassPlans,
 		ClassBookingLeads,
@@ -54,6 +53,7 @@ export default buildConfig({
 		Categories,
 		Tags,
 		Media,
+		Users,
 	],
 	// db: sqliteAdapter({
 	// 	client: {

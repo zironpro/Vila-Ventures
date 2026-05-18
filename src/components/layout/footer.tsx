@@ -2,18 +2,15 @@
 
 import Link from "next/link";
 
-import {
-	InstagramLogoIcon,
-	LinkedinLogoIcon,
-	TwitterLogoIcon,
-} from "@phosphor-icons/react";
 import { motion, useReducedMotion } from "motion/react";
 
+import { TrackedCtaLink } from "@/components/analytics/tracked-cta-link";
+import { TrackedSocialLink } from "@/components/analytics/tracked-social-link";
 import { Button } from "@/components/ui/button";
 
 import { LogoIcon } from "@/assets/logo";
 
-import { SITE_CONFIG } from "@/constants/site-config";
+import { SITE_CONFIG, SOCIALS } from "@/constants/site-config";
 
 const footerNav = [
 	{
@@ -33,24 +30,6 @@ const footerNav = [
 			{ label: "Feedback", href: "/#feedback" },
 			{ label: "Contact", href: "/contact" },
 		],
-	},
-] as const;
-
-const socialLinks = [
-	{
-		label: "Visit Vila on Instagram",
-		href: "https://instagram.com/vilaventures",
-		Icon: InstagramLogoIcon,
-	},
-	{
-		label: "Connect on LinkedIn",
-		href: "https://linkedin.com/company/vilaventures",
-		Icon: LinkedinLogoIcon,
-	},
-	{
-		label: "Follow on X (Twitter)",
-		href: "https://x.com/vilaventures",
-		Icon: TwitterLogoIcon,
 	},
 ] as const;
 
@@ -94,7 +73,13 @@ export const Footer = () => {
 								<Button
 									className="shadow-[0_12px_28px_rgba(203,89,27,0.38)] transition hover:-translate-y-0.5 hover:bg-orange-500 hover:shadow-[0_16px_36px_rgba(203,89,27,0.5)]"
 									nativeButton={false}
-									render={<Link href="/contact" />}
+									render={
+										<TrackedCtaLink
+											ctaLabel="Book a discovery call"
+											href="/contact"
+											location="footer_cta"
+										/>
+									}
 									size="lg"
 								>
 									<span>Book a discovery call</span>
@@ -205,18 +190,24 @@ export const Footer = () => {
 									UAE shared through our social spaces.
 								</p>
 								<div className="mt-3 flex flex-wrap gap-3">
-									{socialLinks.map(({ href, label, Icon }) => (
-										<Link
-											aria-label={label}
-											className="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-(--footer-surface-border) bg-black/35 text-(--footer-muted) shadow-[0_8px_18px_rgba(0,0,0,0.35)] outline-none transition hover:-translate-y-0.5 hover:border-primary hover:bg-(--footer-accent-soft) hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-											href={href}
-											key={label}
-											rel="noopener noreferrer"
-											target="_blank"
-										>
-											<Icon className="h-4 w-4" weight="fill" />
-										</Link>
-									))}
+									{SOCIALS.map(({ name, url, Icon }) => {
+										const label = `Visit Vila on ${name}`;
+
+										return (
+											<TrackedSocialLink
+												aria-label={label}
+												className="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-(--footer-surface-border) bg-black/35 text-(--footer-muted) shadow-[0_8px_18px_rgba(0,0,0,0.35)] outline-none transition hover:-translate-y-0.5 hover:border-primary hover:bg-(--footer-accent-soft) hover:text-primary focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+												href={url}
+												key={name}
+												label={label}
+												location="footer"
+												rel="noopener noreferrer"
+												target="_blank"
+											>
+												<Icon className="h-4 w-4" weight="fill" />
+											</TrackedSocialLink>
+										);
+									})}
 								</div>
 							</div>
 						</div>

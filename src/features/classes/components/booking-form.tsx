@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { usePathname } from "next/navigation";
+
 import { SpinnerGapIcon } from "@phosphor-icons/react";
 import { useForm } from "@tanstack/react-form";
 import { toast } from "sonner";
@@ -37,6 +39,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
+import { getClassSlugFromPathname } from "@/lib/analytics/get-booking-source";
+import { useTrackEvent } from "@/lib/analytics/use-track-event";
 
 import { useMembershipSelection } from "./booking-modal";
 
@@ -124,6 +129,9 @@ export function BookingFormModal() {
 }
 
 function BookingForm({ onSubmitted }: { onSubmitted: () => void }) {
+	const pathname = usePathname();
+	const { trackEvent } = useTrackEvent();
+	const classSlug = getClassSlugFromPathname(pathname);
 	const {
 		selectedPlan,
 		selectedTimeSlots,
@@ -172,6 +180,15 @@ function BookingForm({ onSubmitted }: { onSubmitted: () => void }) {
 				if (!response.ok) {
 					throw new Error("Failed to submit booking lead.");
 				}
+
+				trackEvent(ANALYTICS_EVENTS.bookingLeadSubmitted, {
+					plan_name: selectedPlan.name,
+					price: selectedPlan.price,
+					class_type: classType,
+					format_type: formatType,
+					time_slot_count: selectedTimeSlots.length,
+					class_slug: classSlug,
+				});
 
 				toast.success("Booking request sent. We'll contact you shortly.");
 				formApi.reset();

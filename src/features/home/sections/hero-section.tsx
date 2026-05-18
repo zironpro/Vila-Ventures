@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 
+import { TrackedCtaLink } from "@/components/analytics/tracked-cta-link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -37,7 +37,13 @@ export const HeroSection = () => {
 							<Button
 								className="duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:px-8"
 								nativeButton={false}
-								render={<Link href="/shop" />}
+								render={
+									<TrackedCtaLink
+										ctaLabel="Shop Products"
+										href="/shop"
+										location="hero"
+									/>
+								}
 								size="lg"
 								variant="secondary"
 							>

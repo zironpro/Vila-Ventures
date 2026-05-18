@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { TrackedCtaLink } from "@/components/analytics/tracked-cta-link";
 import { Badge } from "@/components/ui/badge";
 
 import { AUDIENCES } from "../constants";
@@ -43,9 +42,14 @@ export const AudienceSection = () => {
 				<div className="mt-12 rounded-xl bg-secondary p-8 text-center lg:mt-20 lg:p-12">
 					<p className="mx-auto max-w-4xl text-2xl text-primary leading-snug lg:text-4xl">
 						Not sure which class is right for you?{" "}
-						<Link className="font-medium hover:underline" href="/contact">
+						<TrackedCtaLink
+							className="font-medium hover:underline"
+							ctaLabel="Book a free discovery call"
+							href="/contact"
+							location="audience_section"
+						>
 							Book a free discovery call
-						</Link>{" "}
+						</TrackedCtaLink>{" "}
 						and we'll help you find your starting point.
 					</p>
 				</div>

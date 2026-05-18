@@ -1,3 +1,7 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 import { CheckIcon, StarIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -6,12 +10,18 @@ import { Button } from "@/components/ui/button";
 
 import { Currency } from "@/assets/icons/currency";
 
+import { ANALYTICS_EVENTS } from "@/lib/analytics/events";
+import { getClassSlugFromPathname } from "@/lib/analytics/get-booking-source";
+import { useTrackEvent } from "@/lib/analytics/use-track-event";
 import { cn } from "@/lib/utils";
 import { pluralize } from "@/lib/utils/pluralize";
 
 import { ClassType, TypeClass, useMembershipSelection } from "./booking-modal";
 
 export function Selector() {
+	const pathname = usePathname();
+	const { trackEvent } = useTrackEvent();
+	const classSlug = getClassSlugFromPathname(pathname);
 	const {
 		typeClass,
 		setTypeClass,
@@ -26,6 +36,18 @@ export function Selector() {
 		currentPlans,
 		currentSchedules,
 	} = useMembershipSelection();
+
+	const handlePlanSelect = (plan: (typeof currentPlans)[number]) => {
+		setSelectedPlan(plan);
+		setSelectedTimeSlots([]);
+		trackEvent(ANALYTICS_EVENTS.bookingPlanSelected, {
+			plan_name: plan.name,
+			price: plan.price,
+			class_type: classType,
+			format_type: formatType,
+			class_slug: classSlug,
+		});
+	};
 
 	return (
 		<div className="space-y-6">
@@ -53,7 +75,9 @@ export function Selector() {
 							size="lg"
 							variant={typeClass === type ? "default" : "outline"}
 						>
-							{type} <span className="sr-only sm:not-sr-only">Yoga</span>
+							<span>
+								{type} <span className="sr-only sm:not-sr-only">Yoga</span>
+							</span>
 						</Button>
 					))}
 				</div>
@@ -99,7 +123,7 @@ export function Selector() {
 
 				<div className="flex gap-3">
 					<Button
-						className="flex-1"
+						className="flex-1 gap-2"
 						onClick={() => {
 							setFormatType("group");
 							setSelectedPlan(null);
@@ -108,6 +132,7 @@ export function Selector() {
 						size="lg"
 						variant={formatType === "group" ? "default" : "outline"}
 					>
+						{/* <UsersThreeIcon className="size-4" weight="fill" /> */}
 						Group Classes
 					</Button>
 					<Button
@@ -120,6 +145,7 @@ export function Selector() {
 						size="lg"
 						variant={formatType === "private" ? "default" : "outline"}
 					>
+						{/* <UserIcon className="size-4" weight="fill" /> */}
 						{classType === "physical" && formatType === "private"
 							? "Private (Max 3 Students)"
 							: "Private Classes"}
@@ -151,15 +177,12 @@ export function Selector() {
 							<button
 								className={cn(
 									"relative isolate z-0 overflow-visible rounded-2xl p-6 text-left transition-all duration-300",
-									selectedPlan?.name === plan.name
+									selectedPlan?.id === plan.id
 										? "bg-white ring-2 ring-primary"
 										: "bg-muted/60 hover:bg-muted"
 								)}
-								key={plan.name}
-								onClick={() => {
-									setSelectedPlan(plan);
-									setSelectedTimeSlots([]);
-								}}
+								key={plan.id}
+								onClick={() => handlePlanSelect(plan)}
 							>
 								<div className="flex items-start justify-between gap-3">
 									<div className="flex-1">
@@ -180,7 +203,7 @@ export function Selector() {
 													</Badge>
 												)}
 											</div>
-											{selectedPlan?.name === plan.name && (
+											{selectedPlan?.id === plan.id && (
 												<motion.div
 													animate={{ scale: 1 }}
 													className="absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-primary"
@@ -207,11 +230,9 @@ export function Selector() {
 											{plan.price}
 											<Currency className="ml-0.5 inline text-muted-foreground" />
 										</div>
-										{classType === "physical" &&
-											formatType === "private" &&
-											plan.name === "2-3 Person" && (
-												<div className="text-xs">Per Person</div>
-											)}
+										{plan.priceSubLabel ? (
+											<div className="text-xs">{plan.priceSubLabel}</div>
+										) : null}
 									</div>
 								</div>
 							</button>
